@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Chatbot Integration Example</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #666;
+      line-height: 1.6;
+    }
+    .code-block {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+    code {
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      color: #e83e8c;
+    }
+    .note {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🤖 Basic Chatbot Integration Example</h1>
+    <p>This is a simple example showing how to integrate the AI chatbot widget into any website.</p>
+    
+    <h2>What you see:</h2>
+    <ul>
+      <li>A floating chatbot button in the bottom-right corner</li>
+      <li>Click it to open the chat window</li>
+      <li>Type a message and see the AI respond</li>
+      <li>Email and WhatsApp buttons for direct contact</li>
+    </ul>
+
+    <div class="note">
+      <strong>💡 Note:</strong> This example uses inline configuration via data attributes. 
+      Check the page source to see how simple it is!
+    </div>
+
+    <h2>Integration Code:</h2>
+    <div class="code-block">
+      <code>
+&lt;script src="../chatbot.js" <br>
+&nbsp;&nbsp;data-api-url="https://3000-irvo1u0aih222qf3n5e3g-1f25e7df.manusvm.computer/api/chatbot/chat"<br>
+&nbsp;&nbsp;data-primary-color="#2ee8c2"<br>
+&nbsp;&nbsp;data-company-name="Demo Company"<br>
+&nbsp;&nbsp;data-welcome-message="Hi! Welcome to our demo. How can I help you today?"<br>
+&gt;&lt;/script&gt;
+      </code>
+    </div>
+
+    <h2>Try it out:</h2>
+    <p>Click the chatbot button in the bottom-right corner and ask a question like:</p>
+    <ul>
+      <li>"What are your pricing plans?"</li>
+      <li>"How does the chatbot work?"</li>
+      <li>"Tell me about your services"</li>
+    </ul>
+
+    <h2>Customization:</h2>
+    <p>You can easily customize the chatbot by changing the data attributes:</p>
+    <ul>
+      <li><code>data-primary-color</code> - Change the theme color</li>
+      <li><code>data-company-name</code> - Your company name</li>
+      <li><code>data-welcome-message</code> - Custom greeting</li>
+      <li><code>data-position</code> - Widget position (bottom-right, bottom-left, etc.)</li>
+      <li><code>data-logo</code> - Your company logo URL</li>
+    </ul>
+
+    <p style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #999;">
+      <strong>Powered by Chatbots-IA</strong> - AI Chatbot Solutions for European Businesses
+    </p>
+  </div>
+
+  <!-- Chatbot Integration - This is all you need! -->
+  <script src="../chatbot.js" 
+    data-api-url="https://3000-irvo1u0aih222qf3n5e3g-1f25e7df.manusvm.computer/api/chatbot/chat"
+    data-primary-color="#2ee8c2"
+    data-secondary-color="#1661a0"
+    data-company-name="Demo Company"
+    data-welcome-message="Hi! Welcome to our demo. How can I help you today?"
+    data-email-address="demo@chatbots-ia.com"
+    data-whatsapp-number="+31612345678"
+  ></script>
+</body>
+</html>

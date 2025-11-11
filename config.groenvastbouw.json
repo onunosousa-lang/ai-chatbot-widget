@@ -1,0 +1,18 @@
+{
+  "apiUrl": "https://3000-irvo1u0aih222qf3n5e3g-1f25e7df.manusvm.computer/api/chatbot/chat",
+  "primaryColor": "#00D084",
+  "secondaryColor": "#00A86B",
+  "companyName": "Groenvast Bouw",
+  "welcomeMessage": "Welkom bij Groenvastbouw! 🏡 Ik ben je AI-assistent. Hoe kan ik je helpen met duurzame woningbouw?",
+  "placeholder": "Type je vraag...",
+  "position": "bottom-right",
+  "logo": "https://groenvastbouw.nl/wp-content/uploads/2023/01/groenvast-logo.png",
+  "emailButton": true,
+  "whatsappButton": true,
+  "emailAddress": "info@groenvastbouw.nl",
+  "whatsappNumber": "+31612345678",
+  "buttonSize": "60px",
+  "chatHeight": "450px",
+  "chatWidth": "380px",
+  "zIndex": 9999
+}
