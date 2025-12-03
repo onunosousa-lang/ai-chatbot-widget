@@ -1,0 +1,8 @@
+{
+  "name": "ai-chatbot-widget",
+  "version": "1.0.0",
+  "description": "AI chatbot widget with OpenAI backend",
+  "dependencies": {
+    "openai": "^4.20.0"
+  }
+}
