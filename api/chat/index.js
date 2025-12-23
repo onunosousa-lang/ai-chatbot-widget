@@ -4,18 +4,21 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-export const runtime = 'edge';
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-export async function POST(request) {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json'
-  };
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
   try {
-    const { message, threadId } = await request.json();
+    const { message, threadId } = req.body;
     
     const thread = threadId ? { id: threadId } : await openai.beta.threads.create();
     
@@ -29,10 +32,12 @@ export async function POST(request) {
     });
     
     let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+    let attempts = 0;
     
-    while (runStatus.status !== 'completed') {
+    while (runStatus.status !== 'completed' && attempts < 30) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      attempts++;
       
       if (runStatus.status === 'failed') {
         throw new Error('Assistant run failed');
@@ -42,10 +47,10 @@ export async function POST(request) {
     const messages = await openai.beta.threads.messages.list(thread.id);
     const response = messages.data[0].content[0].text.value;
     
-    return new Response(JSON.stringify({ response, threadId: thread.id }), { headers });
+    return res.status(200).json({ response, threadId: thread.id });
     
   } catch (error) {
     console.error('Chat API Error:', error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500, headers });
+    return res.status(500).json({ error: error.message });
   }
 }
