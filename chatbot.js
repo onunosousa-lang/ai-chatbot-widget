@@ -18,7 +18,7 @@
 
   // Default configuration
   const defaultConfig = {
-    apiUrl: 'https://3000-irvo1u0aih222qf3n5e3g-1f25e7df.manusvm.computer/api/chatbot/chat',
+    apiUrl: 'https://ai-chatbot-widget-eight.vercel.app/api/chat',
     primaryColor: '#2ee8c2',
     secondaryColor: '#1661a0',
     companyName: 'Chatbots-IA',
