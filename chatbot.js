@@ -490,11 +490,14 @@
     });
 
     emailBtn?.addEventListener('click', () => {
-      window.location.href = `mailto:${config.emailAddress}`;
+      const emailLink = `mailto:${config.emailAddress}?subject=Contacto via Chatbot`;
+      window.top.location.href = emailLink;
     });
 
     whatsappBtn?.addEventListener('click', () => {
-      window.open(`https://wa.me/${config.whatsappNumber.replace(/[^0-9]/g, '')}`, '_blank');
+      const phoneNumber = config.whatsappNumber.replace(/[^0-9]/g, '');
+      const whatsappLink = `https://wa.me/${phoneNumber}?text=Olá! Tenho uma pergunta sobre duurzaam bouwen.`;
+      window.open(whatsappLink, '_blank', 'noopener,noreferrer');
     });
   }
 
