@@ -1,0 +1,201 @@
+{
+  "name": "Chatbot Lead Collection",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 1,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {},
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook",
+            "label": "Webhook",
+            "required": true
+          }
+        ],
+        "expect": []
+      }
+    },
+    {
+      "id": 2,
+      "module": "google-sheets:addRow",
+      "version": 3,
+      "parameters": {
+        "__IMTCONN__": 1
+      },
+      "mapper": {
+        "select": "map",
+        "sheetId": "",
+        "spreadsheetId": "",
+        "tableFirstRow": "A1:Z1",
+        "values": {
+          "0": "{{1.name}}",
+          "1": "{{1.email}}",
+          "2": "{{1.phone}}",
+          "3": "{{1.preferred_time}}",
+          "4": "{{1.notes}}",
+          "5": "{{1.timestamp}}",
+          "6": "{{1.source}}"
+        },
+        "insertDataOption": "INSERT_ROWS",
+        "valueInputOption": "USER_ENTERED"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "select": {
+              "label": "Enter manually"
+            },
+            "insertDataOption": {
+              "label": "Insert rows"
+            },
+            "valueInputOption": {
+              "label": "User entered"
+            }
+          },
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Google Sheets connection"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ],
+        "expect": [
+          {
+            "name": "select",
+            "type": "select",
+            "label": "Choose a Method",
+            "required": true,
+            "validate": {
+              "enum": [
+                "map",
+                "fromAll",
+                "select"
+              ]
+            }
+          },
+          {
+            "name": "spreadsheetId",
+            "type": "text",
+            "label": "Spreadsheet ID",
+            "required": true
+          },
+          {
+            "name": "sheetId",
+            "type": "text",
+            "label": "Sheet Name",
+            "required": true
+          },
+          {
+            "name": "values",
+            "spec": {
+              "type": "text",
+              "name": "value"
+            },
+            "type": "array",
+            "label": "Values"
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "module": "email:ActionSendEmail",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "to": "your-email@example.com",
+        "subject": "New Lead: {{1.name}}",
+        "html": "<h2>New Lead from Chatbot</h2>\n<p><strong>Name:</strong> {{1.name}}</p>\n<p><strong>Email:</strong> {{1.email}}</p>\n<p><strong>Phone:</strong> {{1.phone}}</p>\n<p><strong>Preferred Time:</strong> {{1.preferred_time}}</p>\n<p><strong>Notes:</strong> {{1.notes}}</p>\n<p><strong>Timestamp:</strong> {{1.timestamp}}</p>\n<p><strong>Source:</strong> {{1.source}}</p>",
+        "attachments": []
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        },
+        "restore": {
+          "expect": {
+            "to": {
+              "mode": "edit"
+            },
+            "cc": {
+              "mode": "edit"
+            },
+            "bcc": {
+              "mode": "edit"
+            },
+            "from": {
+              "mode": "edit"
+            },
+            "attachments": {
+              "mode": "edit"
+            }
+          }
+        },
+        "expect": [
+          {
+            "name": "to",
+            "spec": {
+              "type": "email",
+              "name": "email"
+            },
+            "type": "array",
+            "label": "To",
+            "required": true
+          },
+          {
+            "name": "subject",
+            "type": "text",
+            "label": "Subject"
+          },
+          {
+            "name": "html",
+            "type": "text",
+            "label": "Content"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com"
+  }
+}
