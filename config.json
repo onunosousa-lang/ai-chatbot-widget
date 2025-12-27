@@ -1,5 +1,5 @@
 {
-  "apiUrl": "https://your-api-domain.com/api/chat",
+  "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
   "primaryColor": "#2ee8c2",
   "secondaryColor": "#1661a0",
   "companyName": "Your Company Name",
