@@ -491,13 +491,20 @@
 
     emailBtn?.addEventListener('click', () => {
       const emailLink = `mailto:${config.emailAddress}?subject=Contacto via Chatbot`;
-      window.top.location.href = emailLink;
+      const a = document.createElement('a');
+      a.href = emailLink;
+      a.target = '_self';
+      a.click();
     });
 
     whatsappBtn?.addEventListener('click', () => {
       const phoneNumber = config.whatsappNumber.replace(/[^0-9]/g, '');
       const whatsappLink = `https://wa.me/${phoneNumber}?text=Olá! Tenho uma pergunta sobre duurzaam bouwen.`;
-      window.open(whatsappLink, '_blank', 'noopener,noreferrer');
+      const a = document.createElement('a');
+      a.href = whatsappLink;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.click();
     });
   }
 
