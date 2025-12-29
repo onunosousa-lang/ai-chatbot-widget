@@ -1,5 +1,6 @@
 {
   "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
+  "clientId": "groenvastbouw",
   "primaryColor": "#00D084",
   "secondaryColor": "#00A86B",
   "companyName": "Groenvast Bouw",

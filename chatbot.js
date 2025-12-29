@@ -19,6 +19,7 @@
   // Default configuration
   const defaultConfig = {
     apiUrl: 'https://ai-chatbot-widget-eight.vercel.app/api/chat',
+    clientId: 'default', // Client identifier for multi-tenant support
     primaryColor: '#2ee8c2',
     secondaryColor: '#1661a0',
     companyName: 'Chatbots-IA',
@@ -35,6 +36,9 @@
     chatWidth: '380px',
     zIndex: 9999
   };
+
+  // Thread ID storage for conversation continuity
+  let currentThreadId = null;
 
   // Get script tag and read data attributes
   const scriptTag = document.currentScript;
@@ -501,7 +505,7 @@
   function sendMessage() {
     const input = document.getElementById('chatbot-input');
     const message = input?.value.trim();
-    
+
     if (!message) return;
 
     // Add user message
@@ -511,17 +515,27 @@
     // Show typing indicator
     showTyping();
 
-    // Send to API
+    // Send to API with clientId and threadId for multi-tenant support
     fetch(config.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({
+        message,
+        clientId: config.clientId,
+        threadId: currentThreadId
+      })
     })
     .then(res => res.json())
     .then(data => {
       hideTyping();
+
+      // Store thread ID for conversation continuity
+      if (data.threadId) {
+        currentThreadId = data.threadId;
+      }
+
       addMessage(data.response || data.message || 'Sorry, I could not understand that.', 'bot');
     })
     .catch(err => {

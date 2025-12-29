@@ -20,7 +20,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, threadId } = req.body;
+    const { message, threadId, clientId = 'default' } = req.body;
+
+    // Get client-specific configuration
+    const clientConfig = getClientConfig(clientId);
 
     const thread = threadId ? { id: threadId } : await openai.beta.threads.create();
 
@@ -30,7 +33,7 @@ export default async function handler(req, res) {
     });
 
     const run = await openai.beta.threads.runs.create(thread.id, {
-      assistant_id: process.env.OPENAI_ASSISTANT_ID
+      assistant_id: clientConfig.assistantId
     });
 
     let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
@@ -50,8 +53,8 @@ export default async function handler(req, res) {
           if (toolCall.function.name === 'save_lead') {
             const args = JSON.parse(toolCall.function.arguments);
 
-            // Save the lead
-            await saveLead(args);
+            // Save the lead with client-specific webhook
+            await saveLead(args, clientConfig.webhookUrl);
 
             toolOutputs.push({
               tool_call_id: toolCall.id,
@@ -84,16 +87,33 @@ export default async function handler(req, res) {
   }
 }
 
+// Function to get client-specific configuration
+function getClientConfig(clientId) {
+  // Try client-specific env vars first, fall back to default
+  const assistantId = process.env[`CLIENT_${clientId.toUpperCase()}_ASSISTANT_ID`] || process.env.OPENAI_ASSISTANT_ID;
+  const webhookUrl = process.env[`CLIENT_${clientId.toUpperCase()}_WEBHOOK_URL`] || process.env.LEAD_WEBHOOK_URL;
+
+  if (!assistantId) {
+    throw new Error(`No assistant ID configured for client: ${clientId}`);
+  }
+
+  return {
+    assistantId,
+    webhookUrl,
+    clientId
+  };
+}
+
 // Function to save leads
-async function saveLead(leadData) {
+async function saveLead(leadData, webhookUrl) {
   const { name, email, phone, preferred_time, notes } = leadData;
 
   console.log('📧 New Lead Collected:', leadData);
 
   // Option 1: Send lead via webhook (Zapier, Make.com, etc.)
-  if (process.env.LEAD_WEBHOOK_URL) {
+  if (webhookUrl) {
     try {
-      await fetch(process.env.LEAD_WEBHOOK_URL, {
+      await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
