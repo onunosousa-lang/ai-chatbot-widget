@@ -15,5 +15,17 @@
   "buttonSize": "60px",
   "chatHeight": "450px",
   "chatWidth": "380px",
-  "zIndex": 9999
+  "zIndex": 9999,
+  "conversationStarters": [
+    "💰 Wat kost een passief huis?",
+    "⏱️ Hoe lang duurt een project?",
+    "🏡 Kunnen jullie verbouwen?",
+    "📞 Plan een gratis gesprek"
+  ],
+  "showLanguageSelector": true,
+  "languages": ["nl", "en"],
+  "defaultLanguage": "nl",
+  "proactiveTrigger": true,
+  "socialProof": true,
+  "calendlyUrl": null
 }

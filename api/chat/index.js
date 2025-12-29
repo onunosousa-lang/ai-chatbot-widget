@@ -53,8 +53,11 @@ export default async function handler(req, res) {
           if (toolCall.function.name === 'save_lead') {
             const args = JSON.parse(toolCall.function.arguments);
 
-            // Save the lead with client-specific webhook
-            await saveLead(args, clientConfig.webhookUrl);
+            // Get conversation history from thread
+            const conversationSummary = await getConversationSummary(thread.id);
+
+            // Save the lead with client-specific webhook, clientId, and conversation
+            await saveLead(args, clientConfig.webhookUrl, clientId, conversationSummary);
 
             toolOutputs.push({
               tool_call_id: toolCall.id,
@@ -104,13 +107,35 @@ function getClientConfig(clientId) {
   };
 }
 
+// Function to get conversation summary from thread
+async function getConversationSummary(threadId) {
+  try {
+    const messages = await openai.beta.threads.messages.list(threadId, { limit: 20 });
+
+    // Format messages as conversation transcript
+    const transcript = messages.data
+      .reverse() // Oldest first
+      .map(msg => {
+        const role = msg.role === 'user' ? 'User' : 'Assistant';
+        const content = msg.content[0]?.text?.value || '';
+        return `${role}: ${content}`;
+      })
+      .join('\n\n');
+
+    return transcript;
+  } catch (error) {
+    console.error('Error getting conversation summary:', error);
+    return '';
+  }
+}
+
 // Function to save leads
-async function saveLead(leadData, webhookUrl) {
+async function saveLead(leadData, webhookUrl, clientId, conversationSummary = '') {
   const { name, email, phone, preferred_time, notes } = leadData;
 
   console.log('📧 New Lead Collected:', leadData);
 
-  // Option 1: Send lead via webhook (Zapier, Make.com, etc.)
+  // Send lead via webhook (Zapier, Make.com, etc.)
   if (webhookUrl) {
     try {
       await fetch(webhookUrl, {
@@ -122,6 +147,8 @@ async function saveLead(leadData, webhookUrl) {
           phone,
           preferred_time,
           notes,
+          conversationSummary,
+          clientId,
           timestamp: new Date().toISOString(),
           source: 'chatbot'
         })
@@ -130,9 +157,6 @@ async function saveLead(leadData, webhookUrl) {
       console.error('Webhook error:', error);
     }
   }
-
-  // Option 2: You can also add email sending here
-  // Or save to a database, Airtable, etc.
 
   return true;
 }
