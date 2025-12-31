@@ -5,7 +5,7 @@
   "primaryColor": "#2ee8c2",
   "secondaryColor": "#1661a0",
   "companyName": "Your Company Name",
-  "welcomeMessage": "Hi! How can I help you today? 👋",
+  "welcomeMessage": "...",
   "placeholder": "Type your message...",
   "position": "bottom-right",
 
@@ -20,12 +20,7 @@
   "chatWidth": "380px",
   "zIndex": 9999,
 
-  "conversationStarters": [
-    "💡 How does it work?",
-    "💰 View pricing",
-    "📊 See results",
-    "📞 Book a free call"
-  ],
+  "conversationStarters": [],
 
   "showLanguageSelector": true,
   "languages": ["nl", "en"],
