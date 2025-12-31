@@ -20,7 +20,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, threadId } = req.body;
+    const { message, threadId, clientId = 'default' } = req.body;
+
+    // Get client-specific configuration
+    const clientConfig = getClientConfig(clientId);
 
     const thread = threadId ? { id: threadId } : await openai.beta.threads.create();
 
@@ -30,7 +33,7 @@ export default async function handler(req, res) {
     });
 
     const run = await openai.beta.threads.runs.create(thread.id, {
-      assistant_id: process.env.OPENAI_ASSISTANT_ID
+      assistant_id: clientConfig.assistantId
     });
 
     let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
@@ -50,8 +53,11 @@ export default async function handler(req, res) {
           if (toolCall.function.name === 'save_lead') {
             const args = JSON.parse(toolCall.function.arguments);
 
-            // Save the lead
-            await saveLead(args);
+            // Get conversation history from thread
+            const conversationSummary = await getConversationSummary(thread.id);
+
+            // Save the lead with client-specific webhook, clientId, and conversation
+            await saveLead(args, clientConfig.webhookUrl, clientId, conversationSummary);
 
             toolOutputs.push({
               tool_call_id: toolCall.id,
@@ -84,16 +90,55 @@ export default async function handler(req, res) {
   }
 }
 
+// Function to get client-specific configuration
+function getClientConfig(clientId) {
+  // Try client-specific env vars first, fall back to default
+  const assistantId = process.env[`CLIENT_${clientId.toUpperCase()}_ASSISTANT_ID`] || process.env.OPENAI_ASSISTANT_ID;
+  const webhookUrl = process.env[`CLIENT_${clientId.toUpperCase()}_WEBHOOK_URL`] || process.env.LEAD_WEBHOOK_URL;
+
+  if (!assistantId) {
+    throw new Error(`No assistant ID configured for client: ${clientId}`);
+  }
+
+  return {
+    assistantId,
+    webhookUrl,
+    clientId
+  };
+}
+
+// Function to get conversation summary from thread
+async function getConversationSummary(threadId) {
+  try {
+    const messages = await openai.beta.threads.messages.list(threadId, { limit: 20 });
+
+    // Format messages as conversation transcript
+    const transcript = messages.data
+      .reverse() // Oldest first
+      .map(msg => {
+        const role = msg.role === 'user' ? 'User' : 'Assistant';
+        const content = msg.content[0]?.text?.value || '';
+        return `${role}: ${content}`;
+      })
+      .join('\n\n');
+
+    return transcript;
+  } catch (error) {
+    console.error('Error getting conversation summary:', error);
+    return '';
+  }
+}
+
 // Function to save leads
-async function saveLead(leadData) {
+async function saveLead(leadData, webhookUrl, clientId, conversationSummary = '') {
   const { name, email, phone, preferred_time, notes } = leadData;
 
   console.log('📧 New Lead Collected:', leadData);
 
-  // Option 1: Send lead via webhook (Zapier, Make.com, etc.)
-  if (process.env.LEAD_WEBHOOK_URL) {
+  // Send lead via webhook (Zapier, Make.com, etc.)
+  if (webhookUrl) {
     try {
-      await fetch(process.env.LEAD_WEBHOOK_URL, {
+      await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,6 +147,8 @@ async function saveLead(leadData) {
           phone,
           preferred_time,
           notes,
+          conversationSummary,
+          clientId,
           timestamp: new Date().toISOString(),
           source: 'chatbot'
         })
@@ -110,9 +157,6 @@ async function saveLead(leadData) {
       console.error('Webhook error:', error);
     }
   }
-
-  // Option 2: You can also add email sending here
-  // Or save to a database, Airtable, etc.
 
   return true;
 }

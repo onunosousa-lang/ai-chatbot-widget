@@ -19,6 +19,7 @@
   // Default configuration
   const defaultConfig = {
     apiUrl: 'https://ai-chatbot-widget-eight.vercel.app/api/chat',
+    clientId: 'default', // Client identifier for multi-tenant support
     primaryColor: '#2ee8c2',
     secondaryColor: '#1661a0',
     companyName: 'Chatbots-IA',
@@ -33,7 +34,68 @@
     buttonSize: '60px',
     chatHeight: '450px',
     chatWidth: '380px',
-    zIndex: 9999
+    zIndex: 9999,
+    conversationStarters: [], // Quick start questions
+    showLanguageSelector: false, // Enable EN/NL switcher
+    languages: ['nl', 'en'], // Available languages
+    defaultLanguage: 'nl',
+    proactiveTrigger: true, // Show proactive messages
+    socialProof: false, // Show social proof notifications
+    calendlyUrl: null, // Calendly booking URL
+    enableSound: true, // Sound notifications
+    enableSessionPersistence: true, // Remember conversations
+    enableAnalytics: true, // Track events
+    enableTypingDelay: true, // Natural typing simulation
+    businessHours: null, // {start: '09:00', end: '17:00', days: [1,2,3,4,5], timezone: 'Europe/Amsterdam'}
+    showRating: true, // Conversation rating widget
+    detectReturningUsers: true, // Greet returning visitors
+    pageSpecificTriggers: {} // URL-specific proactive messages
+  };
+
+  // Thread ID storage for conversation continuity
+  let currentThreadId = null;
+
+  // Current language
+  let currentLanguage = null;
+
+  // Chat history for conversation summary
+  let chatHistory = [];
+
+  // Session tracking
+  let sessionStartTime = Date.now();
+  let pageViewCount = 0;
+  let scrollDepth = 0;
+  let timeOnPage = 0;
+  let interactionCount = 0;
+  let unreadCount = 0;
+  let isReturningUser = false;
+  let lastVisit = null;
+
+  // Analytics tracking
+  const analytics = {
+    events: [],
+    track: function(eventName, data = {}) {
+      const event = {
+        event: eventName,
+        timestamp: new Date().toISOString(),
+        clientId: config.clientId,
+        sessionId: getSessionId(),
+        ...data
+      };
+      this.events.push(event);
+
+      // Send to Google Analytics if available
+      if (config.enableAnalytics && window.gtag) {
+        window.gtag('event', eventName, data);
+      }
+
+      // Send to custom analytics endpoint if configured
+      if (config.analyticsUrl) {
+        navigator.sendBeacon(config.analyticsUrl, JSON.stringify(event));
+      }
+
+      console.log('📊 Analytics:', eventName, data);
+    }
   };
 
   // Get script tag and read data attributes
@@ -132,14 +194,19 @@
         background: #ff4444;
         color: white;
         border-radius: 50%;
-        width: 20px;
+        min-width: 20px;
         height: 20px;
-        display: flex;
+        padding: 0 6px;
+        display: none;
         align-items: center;
         justify-content: center;
         font-size: 10px;
         font-weight: bold;
         animation: bounce 1s infinite;
+      }
+
+      .chatbot-button-badge.show {
+        display: flex;
       }
 
       @keyframes pulse {
@@ -377,6 +444,168 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+
+      /* Conversation Starters */
+      .chatbot-starters {
+        padding: 12px 16px;
+        background: white;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chatbot-starter-btn {
+        padding: 8px 12px;
+        border: 1px solid ${config.primaryColor};
+        background: white;
+        color: ${config.primaryColor};
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s;
+        flex: 0 0 auto;
+      }
+
+      .chatbot-starter-btn:hover {
+        background: ${config.primaryColor};
+        color: white;
+      }
+
+      /* Quick Reply Buttons */
+      .chatbot-quick-replies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .chatbot-quick-reply {
+        padding: 6px 12px;
+        background: white;
+        border: 1px solid ${config.primaryColor};
+        color: ${config.primaryColor};
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+
+      .chatbot-quick-reply:hover {
+        background: ${config.primaryColor};
+        color: white;
+      }
+
+      /* Language Selector */
+      .chatbot-language-selector {
+        display: flex;
+        gap: 4px;
+        margin-left: auto;
+      }
+
+      .chatbot-lang-btn {
+        padding: 4px 8px;
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s;
+      }
+
+      .chatbot-lang-btn:hover,
+      .chatbot-lang-btn.active {
+        background: white;
+        color: ${config.primaryColor};
+      }
+
+      /* Social Proof Notification */
+      .chatbot-social-proof {
+        position: fixed;
+        bottom: 100px;
+        ${config.position.includes('right') ? 'right: 20px;' : 'left: 20px;'}
+        background: white;
+        padding: 12px 16px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        max-width: 280px;
+        animation: slideIn 0.3s ease;
+        z-index: ${config.zIndex - 1};
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .chatbot-social-proof-close {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #999;
+        font-size: 16px;
+      }
+
+      /* Markdown formatting */
+      .chatbot-message-content strong {
+        font-weight: 600;
+      }
+
+      .chatbot-message-content em {
+        font-style: italic;
+      }
+
+      .chatbot-message-content a {
+        color: ${config.primaryColor};
+        text-decoration: underline;
+      }
+
+      .chatbot-message-content ul,
+      .chatbot-message-content ol {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+
+      .chatbot-message-content li {
+        margin: 4px 0;
+      }
+
+      /* Proactive message */
+      .chatbot-proactive {
+        position: fixed;
+        bottom: ${parseInt(config.buttonSize) + 30}px;
+        ${config.position.includes('right') ? 'right: 20px;' : 'left: 20px;'}
+        background: white;
+        padding: 12px 16px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        max-width: 250px;
+        animation: bounce 1s infinite;
+        cursor: pointer;
+        z-index: ${config.zIndex - 1};
+      }
+
+      .chatbot-proactive::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        ${config.position.includes('right') ? 'right: 20px;' : 'left: 20px;'}
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid white;
+      }
     `;
     document.head.appendChild(style);
   }
@@ -407,6 +636,17 @@
                 <p>Online now</p>
               </div>
             </div>
+            ${config.showLanguageSelector ? `
+            <div class="chatbot-language-selector">
+              ${config.languages.map(lang => `
+                <button class="chatbot-lang-btn ${lang === config.defaultLanguage ? 'active' : ''}"
+                        data-lang="${lang}"
+                        id="chatbot-lang-${lang}">
+                  ${lang.toUpperCase()}
+                </button>
+              `).join('')}
+            </div>
+            ` : ''}
             <button class="chatbot-close" id="chatbot-close">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 6L6 18M6 6l12 12"/>
@@ -419,6 +659,14 @@
               <div class="chatbot-message-content">${config.welcomeMessage}</div>
             </div>
           </div>
+
+          ${config.conversationStarters && config.conversationStarters.length > 0 ? `
+          <div class="chatbot-starters" id="chatbot-starters">
+            ${config.conversationStarters.map(starter => `
+              <button class="chatbot-starter-btn" onclick="window.chatbotSendStarter('${starter.replace(/'/g, "\\'")}')">${starter}</button>
+            `).join('')}
+          </div>
+          ` : ''}
 
           ${config.emailButton || config.whatsappButton ? `
           <div class="chatbot-actions">
@@ -478,6 +726,9 @@
 
     toggleBtn?.addEventListener('click', () => {
       window?.classList.toggle('open');
+      if (window?.classList.contains('open')) {
+        removeProactiveMessage();
+      }
     });
 
     closeBtn?.addEventListener('click', () => {
@@ -506,33 +757,97 @@
       a.rel = 'noopener noreferrer';
       a.click();
     });
+
+    // Language selector
+    if (config.showLanguageSelector) {
+      config.languages.forEach(lang => {
+        const langBtn = document.getElementById(`chatbot-lang-${lang}`);
+        langBtn?.addEventListener('click', () => switchLanguage(lang));
+      });
+    }
+
+    // Initialize language
+    currentLanguage = config.defaultLanguage;
+
+    // Setup proactive triggers
+    if (config.proactiveTrigger) {
+      setupProactiveTriggers();
+    }
+
+    // Setup social proof
+    if (config.socialProof) {
+      setupSocialProof();
+    }
+
+    // Global function for conversation starters
+    window.chatbotSendStarter = function(text) {
+      document.getElementById('chatbot-input').value = text;
+      sendMessage();
+      // Hide starters after first use
+      const starters = document.getElementById('chatbot-starters');
+      if (starters) starters.style.display = 'none';
+    };
+
+    // Global function for quick replies
+    window.chatbotSendQuickReply = function(text) {
+      document.getElementById('chatbot-input').value = text;
+      sendMessage();
+    };
   }
 
   function sendMessage() {
     const input = document.getElementById('chatbot-input');
     const message = input?.value.trim();
-    
+
     if (!message) return;
 
     // Add user message
     addMessage(message, 'user');
     input.value = '';
 
+    // Store in chat history
+    chatHistory.push({ role: 'user', content: message });
+
     // Show typing indicator
     showTyping();
 
-    // Send to API
+    // Prefix language instruction if language is set
+    let messageWithLang = message;
+    if (currentLanguage) {
+      const langInstruction = currentLanguage === 'nl'
+        ? 'Antwoord in het Nederlands: '
+        : 'Answer in English: ';
+      messageWithLang = langInstruction + message;
+    }
+
+    // Send to API with clientId and threadId for multi-tenant support
     fetch(config.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({
+        message: messageWithLang,
+        clientId: config.clientId,
+        threadId: currentThreadId,
+        language: currentLanguage
+      })
     })
     .then(res => res.json())
     .then(data => {
       hideTyping();
-      addMessage(data.response || data.message || 'Sorry, I could not understand that.', 'bot');
+
+      // Store thread ID for conversation continuity
+      if (data.threadId) {
+        currentThreadId = data.threadId;
+      }
+
+      const botResponse = data.response || data.message || 'Sorry, I could not understand that.';
+
+      // Store in chat history
+      chatHistory.push({ role: 'assistant', content: botResponse });
+
+      addMessage(botResponse, 'bot');
     })
     .catch(err => {
       hideTyping();
@@ -545,7 +860,34 @@
     const messagesContainer = document.getElementById('chatbot-messages');
     const messageDiv = document.createElement('div');
     messageDiv.className = `chatbot-message ${sender}`;
-    messageDiv.innerHTML = `<div class="chatbot-message-content">${escapeHtml(text)}</div>`;
+
+    // Check for quick reply buttons syntax [BUTTONS: Option 1 | Option 2]
+    const buttonMatch = text.match(/\[BUTTONS:\s*(.*?)\]/);
+    let messageText = text;
+    let buttons = null;
+
+    if (buttonMatch && sender === 'bot') {
+      buttons = buttonMatch[1].split('|').map(b => b.trim());
+      messageText = text.replace(/\[BUTTONS:\s*.*?\]/, '').trim();
+    }
+
+    // Parse markdown for bot messages
+    const formattedText = sender === 'bot' ? parseMarkdown(messageText) : escapeHtml(messageText);
+
+    let html = `<div class="chatbot-message-content">${formattedText}</div>`;
+
+    // Add quick reply buttons if present
+    if (buttons && buttons.length > 0) {
+      html += '<div class="chatbot-quick-replies">';
+      buttons.forEach(btn => {
+        html += `<button class="chatbot-quick-reply" onclick="window.chatbotSendQuickReply('${btn.replace(/'/g, "\\'")}')">
+          ${escapeHtml(btn)}
+        </button>`;
+      });
+      html += '</div>';
+    }
+
+    messageDiv.innerHTML = html;
     messagesContainer?.appendChild(messageDiv);
     messagesContainer?.scrollTo(0, messagesContainer.scrollHeight);
   }
@@ -572,6 +914,661 @@
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  // Parse markdown formatting
+  function parseMarkdown(text) {
+    let html = escapeHtml(text);
+
+    // Bold **text**
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Italic *text*
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    // Links [text](url)
+    html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+    // Line breaks
+    html = html.replace(/\n/g, '<br>');
+
+    // Unordered lists
+    html = html.replace(/^\- (.+)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+    return html;
+  }
+
+  // Switch language
+  function switchLanguage(lang) {
+    currentLanguage = lang;
+
+    // Update button states
+    config.languages.forEach(l => {
+      const btn = document.getElementById(`chatbot-lang-${l}`);
+      if (btn) {
+        if (l === lang) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      }
+    });
+
+    // Add system message
+    const langNames = { 'nl': 'Nederlands', 'en': 'English' };
+    const msg = lang === 'nl'
+      ? `Taal gewijzigd naar ${langNames[lang]}`
+      : `Language changed to ${langNames[lang]}`;
+
+    addMessage(msg, 'bot');
+  }
+
+  // Setup proactive chat triggers
+  function setupProactiveTriggers() {
+    let triggered = false;
+
+    // Trigger after 30 seconds on page
+    setTimeout(() => {
+      if (!triggered && !document.getElementById('chatbot-window')?.classList.contains('open')) {
+        showProactiveMessage(config.defaultLanguage === 'nl'
+          ? "Heb je een vraag? Ik help je graag! 💬"
+          : "Have a question? I'm here to help! 💬");
+        triggered = true;
+      }
+    }, 30000);
+
+    // Exit intent (mouse leaving viewport)
+    document.addEventListener('mouseleave', (e) => {
+      if (!triggered && e.clientY < 10 && !document.getElementById('chatbot-window')?.classList.contains('open')) {
+        showProactiveMessage(config.defaultLanguage === 'nl'
+          ? "Wacht! Heb je nog vragen? 🤔"
+          : "Wait! Any questions? 🤔");
+        triggered = true;
+      }
+    });
+
+    // After scrolling 50%
+    let scrollTriggered = false;
+    window.addEventListener('scroll', () => {
+      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      if (!scrollTriggered && scrollPercent > 50 && !document.getElementById('chatbot-window')?.classList.contains('open')) {
+        showProactiveMessage(config.defaultLanguage === 'nl'
+          ? "Zie je iets interessants? Vraag het me! 💡"
+          : "See something interesting? Ask me! 💡");
+        scrollTriggered = true;
+      }
+    });
+  }
+
+  function showProactiveMessage(message) {
+    const existing = document.getElementById('chatbot-proactive-msg');
+    if (existing) return;
+
+    const proactiveDiv = document.createElement('div');
+    proactiveDiv.id = 'chatbot-proactive-msg';
+    proactiveDiv.className = 'chatbot-proactive';
+    proactiveDiv.textContent = message;
+    proactiveDiv.onclick = () => {
+      document.getElementById('chatbot-window')?.classList.add('open');
+      removeProactiveMessage();
+    };
+
+    document.body.appendChild(proactiveDiv);
+
+    // Auto-remove after 10 seconds
+    setTimeout(removeProactiveMessage, 10000);
+  }
+
+  function removeProactiveMessage() {
+    const msg = document.getElementById('chatbot-proactive-msg');
+    if (msg) msg.remove();
+  }
+
+  // Setup social proof notifications
+  function setupSocialProof() {
+    const messages = config.defaultLanguage === 'nl' ? [
+      "💬 Jan uit Utrecht kreeg net een offerte",
+      "✅ 15 mensen gebruikten deze week de chatbot",
+      "⭐ Gemiddelde beoordeling: 4.8/5",
+      "🏡 Wij bouwden 23 passieve huizen in 2024"
+    ] : [
+      "💬 John from Utrecht just got a quote",
+      "✅ 15 people used the chatbot this week",
+      "⭐ Average rating: 4.8/5",
+      "🏡 We built 23 passive houses in 2024"
+    ];
+
+    let currentIndex = 0;
+
+    setInterval(() => {
+      if (!document.getElementById('chatbot-window')?.classList.contains('open')) {
+        showSocialProof(messages[currentIndex]);
+        currentIndex = (currentIndex + 1) % messages.length;
+      }
+    }, 120000); // Every 2 minutes
+  }
+
+  function showSocialProof(message) {
+    const existing = document.getElementById('chatbot-social-proof');
+    if (existing) return;
+
+    const proofDiv = document.createElement('div');
+    proofDiv.id = 'chatbot-social-proof';
+    proofDiv.className = 'chatbot-social-proof';
+    proofDiv.innerHTML = `
+      ${escapeHtml(message)}
+      <button class="chatbot-social-proof-close" onclick="this.parentElement.remove()">×</button>
+    `;
+
+    document.body.appendChild(proofDiv);
+
+    // Auto-remove after 8 seconds
+    setTimeout(() => {
+      const proof = document.getElementById('chatbot-social-proof');
+      if (proof) proof.remove();
+    }, 8000);
+  }
+
+  // ===== PREMIUM FEATURES =====
+
+  // Session ID generator
+  function getSessionId() {
+    let sessionId = localStorage.getItem('chatbot_session_id');
+    if (!sessionId) {
+      sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('chatbot_session_id', sessionId);
+    }
+    return sessionId;
+  }
+
+  // Load session from localStorage
+  function loadSession() {
+    if (!config.enableSessionPersistence) return false;
+
+    try {
+      const saved = localStorage.getItem('chatbot_session');
+      if (!saved) return false;
+
+      const session = JSON.parse(saved);
+      const age = Date.now() - session.timestamp;
+
+      // Expire after 24 hours
+      if (age > 24 * 60 * 60 * 1000) {
+        localStorage.removeItem('chatbot_session');
+        return false;
+      }
+
+      // Restore session
+      currentThreadId = session.threadId;
+      chatHistory = session.chatHistory || [];
+      currentLanguage = session.language || config.defaultLanguage;
+
+      // Restore chat messages in UI
+      if (chatHistory.length > 0) {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        messagesContainer.innerHTML = '';
+        chatHistory.forEach(msg => {
+          addMessage(msg.content, msg.role === 'user' ? 'user' : 'bot');
+        });
+      }
+
+      analytics.track('session_restored', {
+        messageCount: chatHistory.length,
+        age: Math.round(age / 1000 / 60) + ' minutes'
+      });
+
+      return true;
+    } catch (e) {
+      console.error('Error loading session:', e);
+      return false;
+    }
+  }
+
+  // Save session to localStorage
+  function saveSession() {
+    if (!config.enableSessionPersistence) return;
+
+    try {
+      const session = {
+        threadId: currentThreadId,
+        chatHistory: chatHistory,
+        language: currentLanguage,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('chatbot_session', JSON.stringify(session));
+    } catch (e) {
+      console.error('Error saving session:', e);
+    }
+  }
+
+  // Detect returning users
+  function detectReturningUser() {
+    if (!config.detectReturningUsers) return;
+
+    const visits = localStorage.getItem('chatbot_visits');
+    const lastVisit = localStorage.getItem('chatbot_last_visit');
+
+    if (visits) {
+      isReturningUser = true;
+      const visitCount = parseInt(visits) + 1;
+      localStorage.setItem('chatbot_visits', visitCount.toString());
+      localStorage.setItem('chatbot_last_visit', Date.now().toString());
+
+      analytics.track('returning_user', {
+        visits: visitCount,
+        lastVisit: lastVisit ? new Date(parseInt(lastVisit)).toISOString() : 'unknown'
+      });
+
+      // Show personalized welcome if no active session
+      if (!currentThreadId && visitCount > 1) {
+        setTimeout(() => {
+          const msg = config.defaultLanguage === 'nl'
+            ? `Welkom terug! Hoe kan ik je vandaag helpen? 👋`
+            : `Welcome back! How can I help you today? 👋`;
+
+          // Update welcome message
+          const welcomeMsg = document.querySelector('.chatbot-message.bot .chatbot-message-content');
+          if (welcomeMsg) {
+            welcomeMsg.textContent = msg;
+          }
+        }, 500);
+      }
+    } else {
+      localStorage.setItem('chatbot_visits', '1');
+      localStorage.setItem('chatbot_last_visit', Date.now().toString());
+
+      analytics.track('new_user', {});
+    }
+  }
+
+  // Check business hours
+  function isWithinBusinessHours() {
+    if (!config.businessHours) return true;
+
+    try {
+      const { start, end, days, timezone } = config.businessHours;
+      const now = new Date(new Date().toLocaleString('en-US', { timeZone: timezone || 'Europe/Amsterdam' }));
+
+      const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+      const currentTime = now.getHours() * 100 + now.getMinutes(); // e.g., 14:30 = 1430
+
+      const startTime = parseInt(start.replace(':', ''));
+      const endTime = parseInt(end.replace(':', ''));
+
+      const isWorkingDay = days.includes(currentDay);
+      const isWorkingHours = currentTime >= startTime && currentTime <= endTime;
+
+      return isWorkingDay && isWorkingHours;
+    } catch (e) {
+      console.error('Error checking business hours:', e);
+      return true;
+    }
+  }
+
+  // Update business hours status
+  function updateBusinessHoursStatus() {
+    if (!config.businessHours) return;
+
+    const statusText = document.querySelector('.chatbot-header-text p');
+    if (!statusText) return;
+
+    if (isWithinBusinessHours()) {
+      statusText.textContent = 'Online now';
+      statusText.style.color = '#4CAF50';
+    } else {
+      const msg = config.defaultLanguage === 'nl'
+        ? 'Offline - Reageren binnen 24u'
+        : 'Offline - Reply within 24h';
+      statusText.textContent = msg;
+      statusText.style.color = '#FF9800';
+    }
+  }
+
+  // Update unread badge
+  function updateUnreadBadge() {
+    const badge = document.querySelector('.chatbot-button-badge');
+    if (!badge) return;
+
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount > 9 ? '9+' : unreadCount.toString();
+      badge.classList.add('show');
+
+      // Update page title
+      if (document.hidden) {
+        document.title = `(${unreadCount}) ${document.title.replace(/^\(\d+\)\s*/, '')}`;
+      }
+    } else {
+      badge.classList.remove('show');
+      document.title = document.title.replace(/^\(\d+\)\s*/, '');
+    }
+  }
+
+  // Play notification sound
+  function playNotificationSound() {
+    if (!config.enableSound) return;
+
+    try {
+      // Create simple notification beep using Web Audio API
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (e) {
+      console.log('Could not play sound:', e);
+    }
+  }
+
+  // Natural typing delay
+  function calculateTypingDelay(text) {
+    if (!config.enableTypingDelay) return 0;
+
+    // Simulate ~60 characters per second typing speed
+    const charsPerSecond = 60;
+    const baseDelay = (text.length / charsPerSecond) * 1000;
+
+    // Add random variance (±20%)
+    const variance = baseDelay * 0.2;
+    const delay = baseDelay + (Math.random() * variance * 2 - variance);
+
+    // Min 800ms, max 4000ms
+    return Math.max(800, Math.min(4000, delay));
+  }
+
+  // Enhanced add message with typing delay
+  const originalAddMessage = addMessage;
+  function addMessageWithDelay(text, sender) {
+    if (sender === 'bot' && config.enableTypingDelay) {
+      const delay = calculateTypingDelay(text);
+
+      setTimeout(() => {
+        originalAddMessage(text, sender);
+
+        // Update unread count if chat is closed
+        if (!document.getElementById('chatbot-window')?.classList.contains('open')) {
+          unreadCount++;
+          updateUnreadBadge();
+          playNotificationSound();
+        }
+
+        saveSession();
+      }, delay);
+    } else {
+      originalAddMessage(text, sender);
+      saveSession();
+    }
+  }
+
+  // Replace addMessage with delayed version
+  addMessage = addMessageWithDelay;
+
+  // Smart retry logic for API calls
+  async function sendMessageWithRetry(message, retries = 3) {
+    const input = document.getElementById('chatbot-input');
+
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        // Prefix language instruction if language is set
+        let messageWithLang = message;
+        if (currentLanguage) {
+          const langInstruction = currentLanguage === 'nl'
+            ? 'Antwoord in het Nederlands: '
+            : 'Answer in English: ';
+          messageWithLang = langInstruction + message;
+        }
+
+        // Get page context
+        const pageContext = {
+          url: window.location.href,
+          title: document.title,
+          referrer: document.referrer
+        };
+
+        const response = await fetch(config.apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: messageWithLang,
+            clientId: config.clientId,
+            threadId: currentThreadId,
+            language: currentLanguage,
+            pageContext: pageContext
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        hideTyping();
+
+        // Store thread ID for conversation continuity
+        if (data.threadId) {
+          currentThreadId = data.threadId;
+        }
+
+        const botResponse = data.response || data.message || 'Sorry, I could not understand that.';
+
+        // Store in chat history
+        chatHistory.push({ role: 'assistant', content: botResponse });
+
+        addMessage(botResponse, 'bot');
+
+        analytics.track('message_received', {
+          messageLength: botResponse.length,
+          attempt: attempt
+        });
+
+        return; // Success!
+
+      } catch (err) {
+        console.error(`API call attempt ${attempt}/${retries} failed:`, err);
+
+        if (attempt < retries) {
+          // Show retry message
+          const retryMsg = config.defaultLanguage === 'nl'
+            ? `⚠️ Verbinding probleem. Nieuwe poging... (${attempt}/${retries})`
+            : `⚠️ Connection issue. Retrying... (${attempt}/${retries})`;
+
+          // Update typing indicator with retry message
+          const typingDiv = document.getElementById('chatbot-typing');
+          if (typingDiv) {
+            typingDiv.querySelector('.chatbot-typing').innerHTML = retryMsg;
+          }
+
+          // Exponential backoff: 1s, 2s, 4s
+          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt - 1) * 1000));
+        } else {
+          // All retries failed
+          hideTyping();
+          const errorMsg = config.defaultLanguage === 'nl'
+            ? '❌ Kan geen verbinding maken. Probeer het later opnieuw.'
+            : '❌ Could not connect. Please try again later.';
+
+          addMessage(errorMsg, 'bot');
+
+          analytics.track('message_failed', {
+            error: err.message,
+            attempts: retries
+          });
+        }
+      }
+    }
+  }
+
+  // Override sendMessage to use retry logic
+  sendMessage = function() {
+    const input = document.getElementById('chatbot-input');
+    const message = input?.value.trim();
+
+    if (!message) return;
+
+    // Add user message
+    addMessage(message, 'user');
+    input.value = '';
+
+    // Store in chat history
+    chatHistory.push({ role: 'user', content: message });
+
+    // Track analytics
+    analytics.track('message_sent', {
+      messageLength: message.length,
+      conversationLength: chatHistory.length
+    });
+
+    // Show typing indicator
+    showTyping();
+
+    // Send with retry logic
+    sendMessageWithRetry(message);
+
+    // Save session
+    saveSession();
+  };
+
+  // Mobile optimizations
+  function setupMobileOptimizations() {
+    const chatWindow = document.getElementById('chatbot-window');
+    if (!chatWindow) return;
+
+    // Detect mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+    if (isMobile) {
+      // Full screen on mobile
+      chatWindow.style.width = '100vw';
+      chatWindow.style.height = '100vh';
+      chatWindow.style.maxHeight = '100vh';
+      chatWindow.style.borderRadius = '0';
+      chatWindow.style.position = 'fixed';
+      chatWindow.style.top = '0';
+      chatWindow.style.left = '0';
+      chatWindow.style.right = '0';
+      chatWindow.style.bottom = '0';
+      chatWindow.style.margin = '0';
+
+      // Prevent body scroll when chat is open
+      const toggleBtn = document.getElementById('chatbot-toggle');
+      toggleBtn?.addEventListener('click', () => {
+        if (chatWindow.classList.contains('open')) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+      });
+
+      const closeBtn = document.getElementById('chatbot-close');
+      closeBtn?.addEventListener('click', () => {
+        document.body.style.overflow = '';
+      });
+
+      // Swipe down to close
+      let touchStartY = 0;
+      let touchEndY = 0;
+
+      chatWindow.addEventListener('touchstart', (e) => {
+        touchStartY = e.changedTouches[0].screenY;
+      });
+
+      chatWindow.addEventListener('touchend', (e) => {
+        touchEndY = e.changedTouches[0].screenY;
+        if (touchEndY - touchStartY > 100) {
+          // Swiped down more than 100px
+          chatWindow.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+
+      analytics.track('mobile_optimizations_enabled', {
+        userAgent: navigator.userAgent
+      });
+    }
+  }
+
+  // Initialize all premium features
+  function initPremiumFeatures() {
+    // Load session
+    const sessionLoaded = loadSession();
+
+    // Detect returning users
+    detectReturningUser();
+
+    // Update business hours status
+    updateBusinessHoursStatus();
+    setInterval(updateBusinessHoursStatus, 60000); // Update every minute
+
+    // Setup mobile optimizations
+    setupMobileOptimizations();
+
+    // Track page visibility for unread notifications
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && document.getElementById('chatbot-window')?.classList.contains('open')) {
+        unreadCount = 0;
+        updateUnreadBadge();
+      }
+    });
+
+    // Track chat open/close
+    const chatWindow = document.getElementById('chatbot-window');
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          if (chatWindow.classList.contains('open')) {
+            unreadCount = 0;
+            updateUnreadBadge();
+            analytics.track('chatbot_opened', {
+              sessionRestored: sessionLoaded
+            });
+          } else {
+            analytics.track('chatbot_closed', {
+              conversationLength: chatHistory.length
+            });
+          }
+        }
+      });
+    });
+
+    observer.observe(chatWindow, { attributes: true });
+
+    // Track session duration on page unload
+    window.addEventListener('beforeunload', () => {
+      const duration = Date.now() - sessionStartTime;
+      analytics.track('session_end', {
+        duration: Math.round(duration / 1000) + 's',
+        interactions: interactionCount,
+        conversationLength: chatHistory.length
+      });
+    });
+
+    analytics.track('premium_features_initialized', {
+      sessionPersistence: config.enableSessionPersistence,
+      returningUsers: config.detectReturningUsers,
+      analytics: config.enableAnalytics,
+      typingDelay: config.enableTypingDelay,
+      sound: config.enableSound
+    });
+  }
+
+  // Call initialization after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPremiumFeatures);
+  } else {
+    initPremiumFeatures();
   }
 
 })();
