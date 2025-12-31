@@ -21,10 +21,10 @@
   "zIndex": 9999,
 
   "conversationStarters": [
-    "💰 Pricing information",
-    "📞 Schedule a call",
-    "❓ How does it work?",
-    "🚀 Get started"
+    "💡 How does it work?",
+    "💰 View pricing",
+    "📊 See results",
+    "📞 Book a free call"
   ],
 
   "showLanguageSelector": true,
