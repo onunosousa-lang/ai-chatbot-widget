@@ -41,7 +41,15 @@
     defaultLanguage: 'nl',
     proactiveTrigger: true, // Show proactive messages
     socialProof: false, // Show social proof notifications
-    calendlyUrl: null // Calendly booking URL
+    calendlyUrl: null, // Calendly booking URL
+    enableSound: true, // Sound notifications
+    enableSessionPersistence: true, // Remember conversations
+    enableAnalytics: true, // Track events
+    enableTypingDelay: true, // Natural typing simulation
+    businessHours: null, // {start: '09:00', end: '17:00', days: [1,2,3,4,5], timezone: 'Europe/Amsterdam'}
+    showRating: true, // Conversation rating widget
+    detectReturningUsers: true, // Greet returning visitors
+    pageSpecificTriggers: {} // URL-specific proactive messages
   };
 
   // Thread ID storage for conversation continuity
@@ -52,6 +60,43 @@
 
   // Chat history for conversation summary
   let chatHistory = [];
+
+  // Session tracking
+  let sessionStartTime = Date.now();
+  let pageViewCount = 0;
+  let scrollDepth = 0;
+  let timeOnPage = 0;
+  let interactionCount = 0;
+  let unreadCount = 0;
+  let isReturningUser = false;
+  let lastVisit = null;
+
+  // Analytics tracking
+  const analytics = {
+    events: [],
+    track: function(eventName, data = {}) {
+      const event = {
+        event: eventName,
+        timestamp: new Date().toISOString(),
+        clientId: config.clientId,
+        sessionId: getSessionId(),
+        ...data
+      };
+      this.events.push(event);
+
+      // Send to Google Analytics if available
+      if (config.enableAnalytics && window.gtag) {
+        window.gtag('event', eventName, data);
+      }
+
+      // Send to custom analytics endpoint if configured
+      if (config.analyticsUrl) {
+        navigator.sendBeacon(config.analyticsUrl, JSON.stringify(event));
+      }
+
+      console.log('📊 Analytics:', eventName, data);
+    }
+  };
 
   // Get script tag and read data attributes
   const scriptTag = document.currentScript;
@@ -149,14 +194,19 @@
         background: #ff4444;
         color: white;
         border-radius: 50%;
-        width: 20px;
+        min-width: 20px;
         height: 20px;
-        display: flex;
+        padding: 0 6px;
+        display: none;
         align-items: center;
         justify-content: center;
         font-size: 10px;
         font-weight: bold;
         animation: bounce 1s infinite;
+      }
+
+      .chatbot-button-badge.show {
+        display: flex;
       }
 
       @keyframes pulse {
