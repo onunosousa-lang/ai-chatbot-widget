@@ -1060,4 +1060,505 @@
     }, 8000);
   }
 
+  // ===== PREMIUM FEATURES =====
+
+  // Session ID generator
+  function getSessionId() {
+    let sessionId = localStorage.getItem('chatbot_session_id');
+    if (!sessionId) {
+      sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('chatbot_session_id', sessionId);
+    }
+    return sessionId;
+  }
+
+  // Load session from localStorage
+  function loadSession() {
+    if (!config.enableSessionPersistence) return false;
+
+    try {
+      const saved = localStorage.getItem('chatbot_session');
+      if (!saved) return false;
+
+      const session = JSON.parse(saved);
+      const age = Date.now() - session.timestamp;
+
+      // Expire after 24 hours
+      if (age > 24 * 60 * 60 * 1000) {
+        localStorage.removeItem('chatbot_session');
+        return false;
+      }
+
+      // Restore session
+      currentThreadId = session.threadId;
+      chatHistory = session.chatHistory || [];
+      currentLanguage = session.language || config.defaultLanguage;
+
+      // Restore chat messages in UI
+      if (chatHistory.length > 0) {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        messagesContainer.innerHTML = '';
+        chatHistory.forEach(msg => {
+          addMessage(msg.content, msg.role === 'user' ? 'user' : 'bot');
+        });
+      }
+
+      analytics.track('session_restored', {
+        messageCount: chatHistory.length,
+        age: Math.round(age / 1000 / 60) + ' minutes'
+      });
+
+      return true;
+    } catch (e) {
+      console.error('Error loading session:', e);
+      return false;
+    }
+  }
+
+  // Save session to localStorage
+  function saveSession() {
+    if (!config.enableSessionPersistence) return;
+
+    try {
+      const session = {
+        threadId: currentThreadId,
+        chatHistory: chatHistory,
+        language: currentLanguage,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('chatbot_session', JSON.stringify(session));
+    } catch (e) {
+      console.error('Error saving session:', e);
+    }
+  }
+
+  // Detect returning users
+  function detectReturningUser() {
+    if (!config.detectReturningUsers) return;
+
+    const visits = localStorage.getItem('chatbot_visits');
+    const lastVisit = localStorage.getItem('chatbot_last_visit');
+
+    if (visits) {
+      isReturningUser = true;
+      const visitCount = parseInt(visits) + 1;
+      localStorage.setItem('chatbot_visits', visitCount.toString());
+      localStorage.setItem('chatbot_last_visit', Date.now().toString());
+
+      analytics.track('returning_user', {
+        visits: visitCount,
+        lastVisit: lastVisit ? new Date(parseInt(lastVisit)).toISOString() : 'unknown'
+      });
+
+      // Show personalized welcome if no active session
+      if (!currentThreadId && visitCount > 1) {
+        setTimeout(() => {
+          const msg = config.defaultLanguage === 'nl'
+            ? `Welkom terug! Hoe kan ik je vandaag helpen? 👋`
+            : `Welcome back! How can I help you today? 👋`;
+
+          // Update welcome message
+          const welcomeMsg = document.querySelector('.chatbot-message.bot .chatbot-message-content');
+          if (welcomeMsg) {
+            welcomeMsg.textContent = msg;
+          }
+        }, 500);
+      }
+    } else {
+      localStorage.setItem('chatbot_visits', '1');
+      localStorage.setItem('chatbot_last_visit', Date.now().toString());
+
+      analytics.track('new_user', {});
+    }
+  }
+
+  // Check business hours
+  function isWithinBusinessHours() {
+    if (!config.businessHours) return true;
+
+    try {
+      const { start, end, days, timezone } = config.businessHours;
+      const now = new Date(new Date().toLocaleString('en-US', { timeZone: timezone || 'Europe/Amsterdam' }));
+
+      const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+      const currentTime = now.getHours() * 100 + now.getMinutes(); // e.g., 14:30 = 1430
+
+      const startTime = parseInt(start.replace(':', ''));
+      const endTime = parseInt(end.replace(':', ''));
+
+      const isWorkingDay = days.includes(currentDay);
+      const isWorkingHours = currentTime >= startTime && currentTime <= endTime;
+
+      return isWorkingDay && isWorkingHours;
+    } catch (e) {
+      console.error('Error checking business hours:', e);
+      return true;
+    }
+  }
+
+  // Update business hours status
+  function updateBusinessHoursStatus() {
+    if (!config.businessHours) return;
+
+    const statusText = document.querySelector('.chatbot-header-text p');
+    if (!statusText) return;
+
+    if (isWithinBusinessHours()) {
+      statusText.textContent = 'Online now';
+      statusText.style.color = '#4CAF50';
+    } else {
+      const msg = config.defaultLanguage === 'nl'
+        ? 'Offline - Reageren binnen 24u'
+        : 'Offline - Reply within 24h';
+      statusText.textContent = msg;
+      statusText.style.color = '#FF9800';
+    }
+  }
+
+  // Update unread badge
+  function updateUnreadBadge() {
+    const badge = document.querySelector('.chatbot-button-badge');
+    if (!badge) return;
+
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount > 9 ? '9+' : unreadCount.toString();
+      badge.classList.add('show');
+
+      // Update page title
+      if (document.hidden) {
+        document.title = `(${unreadCount}) ${document.title.replace(/^\(\d+\)\s*/, '')}`;
+      }
+    } else {
+      badge.classList.remove('show');
+      document.title = document.title.replace(/^\(\d+\)\s*/, '');
+    }
+  }
+
+  // Play notification sound
+  function playNotificationSound() {
+    if (!config.enableSound) return;
+
+    try {
+      // Create simple notification beep using Web Audio API
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (e) {
+      console.log('Could not play sound:', e);
+    }
+  }
+
+  // Natural typing delay
+  function calculateTypingDelay(text) {
+    if (!config.enableTypingDelay) return 0;
+
+    // Simulate ~60 characters per second typing speed
+    const charsPerSecond = 60;
+    const baseDelay = (text.length / charsPerSecond) * 1000;
+
+    // Add random variance (±20%)
+    const variance = baseDelay * 0.2;
+    const delay = baseDelay + (Math.random() * variance * 2 - variance);
+
+    // Min 800ms, max 4000ms
+    return Math.max(800, Math.min(4000, delay));
+  }
+
+  // Enhanced add message with typing delay
+  const originalAddMessage = addMessage;
+  function addMessageWithDelay(text, sender) {
+    if (sender === 'bot' && config.enableTypingDelay) {
+      const delay = calculateTypingDelay(text);
+
+      setTimeout(() => {
+        originalAddMessage(text, sender);
+
+        // Update unread count if chat is closed
+        if (!document.getElementById('chatbot-window')?.classList.contains('open')) {
+          unreadCount++;
+          updateUnreadBadge();
+          playNotificationSound();
+        }
+
+        saveSession();
+      }, delay);
+    } else {
+      originalAddMessage(text, sender);
+      saveSession();
+    }
+  }
+
+  // Replace addMessage with delayed version
+  addMessage = addMessageWithDelay;
+
+  // Smart retry logic for API calls
+  async function sendMessageWithRetry(message, retries = 3) {
+    const input = document.getElementById('chatbot-input');
+
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        // Prefix language instruction if language is set
+        let messageWithLang = message;
+        if (currentLanguage) {
+          const langInstruction = currentLanguage === 'nl'
+            ? 'Antwoord in het Nederlands: '
+            : 'Answer in English: ';
+          messageWithLang = langInstruction + message;
+        }
+
+        // Get page context
+        const pageContext = {
+          url: window.location.href,
+          title: document.title,
+          referrer: document.referrer
+        };
+
+        const response = await fetch(config.apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: messageWithLang,
+            clientId: config.clientId,
+            threadId: currentThreadId,
+            language: currentLanguage,
+            pageContext: pageContext
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        hideTyping();
+
+        // Store thread ID for conversation continuity
+        if (data.threadId) {
+          currentThreadId = data.threadId;
+        }
+
+        const botResponse = data.response || data.message || 'Sorry, I could not understand that.';
+
+        // Store in chat history
+        chatHistory.push({ role: 'assistant', content: botResponse });
+
+        addMessage(botResponse, 'bot');
+
+        analytics.track('message_received', {
+          messageLength: botResponse.length,
+          attempt: attempt
+        });
+
+        return; // Success!
+
+      } catch (err) {
+        console.error(`API call attempt ${attempt}/${retries} failed:`, err);
+
+        if (attempt < retries) {
+          // Show retry message
+          const retryMsg = config.defaultLanguage === 'nl'
+            ? `⚠️ Verbinding probleem. Nieuwe poging... (${attempt}/${retries})`
+            : `⚠️ Connection issue. Retrying... (${attempt}/${retries})`;
+
+          // Update typing indicator with retry message
+          const typingDiv = document.getElementById('chatbot-typing');
+          if (typingDiv) {
+            typingDiv.querySelector('.chatbot-typing').innerHTML = retryMsg;
+          }
+
+          // Exponential backoff: 1s, 2s, 4s
+          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt - 1) * 1000));
+        } else {
+          // All retries failed
+          hideTyping();
+          const errorMsg = config.defaultLanguage === 'nl'
+            ? '❌ Kan geen verbinding maken. Probeer het later opnieuw.'
+            : '❌ Could not connect. Please try again later.';
+
+          addMessage(errorMsg, 'bot');
+
+          analytics.track('message_failed', {
+            error: err.message,
+            attempts: retries
+          });
+        }
+      }
+    }
+  }
+
+  // Override sendMessage to use retry logic
+  sendMessage = function() {
+    const input = document.getElementById('chatbot-input');
+    const message = input?.value.trim();
+
+    if (!message) return;
+
+    // Add user message
+    addMessage(message, 'user');
+    input.value = '';
+
+    // Store in chat history
+    chatHistory.push({ role: 'user', content: message });
+
+    // Track analytics
+    analytics.track('message_sent', {
+      messageLength: message.length,
+      conversationLength: chatHistory.length
+    });
+
+    // Show typing indicator
+    showTyping();
+
+    // Send with retry logic
+    sendMessageWithRetry(message);
+
+    // Save session
+    saveSession();
+  };
+
+  // Mobile optimizations
+  function setupMobileOptimizations() {
+    const chatWindow = document.getElementById('chatbot-window');
+    if (!chatWindow) return;
+
+    // Detect mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+    if (isMobile) {
+      // Full screen on mobile
+      chatWindow.style.width = '100vw';
+      chatWindow.style.height = '100vh';
+      chatWindow.style.maxHeight = '100vh';
+      chatWindow.style.borderRadius = '0';
+      chatWindow.style.position = 'fixed';
+      chatWindow.style.top = '0';
+      chatWindow.style.left = '0';
+      chatWindow.style.right = '0';
+      chatWindow.style.bottom = '0';
+      chatWindow.style.margin = '0';
+
+      // Prevent body scroll when chat is open
+      const toggleBtn = document.getElementById('chatbot-toggle');
+      toggleBtn?.addEventListener('click', () => {
+        if (chatWindow.classList.contains('open')) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+      });
+
+      const closeBtn = document.getElementById('chatbot-close');
+      closeBtn?.addEventListener('click', () => {
+        document.body.style.overflow = '';
+      });
+
+      // Swipe down to close
+      let touchStartY = 0;
+      let touchEndY = 0;
+
+      chatWindow.addEventListener('touchstart', (e) => {
+        touchStartY = e.changedTouches[0].screenY;
+      });
+
+      chatWindow.addEventListener('touchend', (e) => {
+        touchEndY = e.changedTouches[0].screenY;
+        if (touchEndY - touchStartY > 100) {
+          // Swiped down more than 100px
+          chatWindow.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+
+      analytics.track('mobile_optimizations_enabled', {
+        userAgent: navigator.userAgent
+      });
+    }
+  }
+
+  // Initialize all premium features
+  function initPremiumFeatures() {
+    // Load session
+    const sessionLoaded = loadSession();
+
+    // Detect returning users
+    detectReturningUser();
+
+    // Update business hours status
+    updateBusinessHoursStatus();
+    setInterval(updateBusinessHoursStatus, 60000); // Update every minute
+
+    // Setup mobile optimizations
+    setupMobileOptimizations();
+
+    // Track page visibility for unread notifications
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && document.getElementById('chatbot-window')?.classList.contains('open')) {
+        unreadCount = 0;
+        updateUnreadBadge();
+      }
+    });
+
+    // Track chat open/close
+    const chatWindow = document.getElementById('chatbot-window');
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          if (chatWindow.classList.contains('open')) {
+            unreadCount = 0;
+            updateUnreadBadge();
+            analytics.track('chatbot_opened', {
+              sessionRestored: sessionLoaded
+            });
+          } else {
+            analytics.track('chatbot_closed', {
+              conversationLength: chatHistory.length
+            });
+          }
+        }
+      });
+    });
+
+    observer.observe(chatWindow, { attributes: true });
+
+    // Track session duration on page unload
+    window.addEventListener('beforeunload', () => {
+      const duration = Date.now() - sessionStartTime;
+      analytics.track('session_end', {
+        duration: Math.round(duration / 1000) + 's',
+        interactions: interactionCount,
+        conversationLength: chatHistory.length
+      });
+    });
+
+    analytics.track('premium_features_initialized', {
+      sessionPersistence: config.enableSessionPersistence,
+      returningUsers: config.detectReturningUsers,
+      analytics: config.enableAnalytics,
+      typingDelay: config.enableTypingDelay,
+      sound: config.enableSound
+    });
+  }
+
+  // Call initialization after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPremiumFeatures);
+  } else {
+    initPremiumFeatures();
+  }
+
 })();
