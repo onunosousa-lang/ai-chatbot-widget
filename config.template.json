@@ -1,43 +1,52 @@
 {
   "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
-  "clientId": "groenvastbouw",
-  "primaryColor": "#00D084",
-  "secondaryColor": "#00A86B",
-  "companyName": "Groenvast Bouw",
+  "clientId": "CHANGE_ME",
+
+  "primaryColor": "#2ee8c2",
+  "secondaryColor": "#1661a0",
+  "companyName": "Your Company Name",
   "welcomeMessage": "...",
-  "placeholder": "Type je bericht...",
+  "placeholder": "Type your message...",
   "position": "bottom-right",
-  "logo": "https://groenvastbouw.nl/wp-content/uploads/2023/01/groenvast-logo.png",
+
+  "logo": "https://example.com/logo.png",
   "emailButton": true,
   "whatsappButton": true,
-  "emailAddress": "info@groenvastbouw.nl",
+  "emailAddress": "contact@example.com",
   "whatsappNumber": "+31612345678",
+
   "buttonSize": "60px",
   "chatHeight": "450px",
   "chatWidth": "380px",
   "zIndex": 9999,
+
   "conversationStarters": [],
+
   "showLanguageSelector": true,
   "languages": ["nl", "en"],
   "defaultLanguage": "nl",
+
   "proactiveTrigger": true,
   "socialProof": true,
   "calendlyUrl": null,
+
   "enableSound": true,
   "enableSessionPersistence": true,
   "enableAnalytics": true,
   "enableTypingDelay": true,
   "showRating": true,
   "detectReturningUsers": true,
+
   "businessHours": {
     "start": "09:00",
     "end": "17:00",
     "days": [1, 2, 3, 4, 5],
     "timezone": "Europe/Amsterdam"
   },
+
   "pageSpecificTriggers": {
-    "/pricing": "Vragen over prijzen? Ik help je graag! 💰",
-    "/portfolio": "Zie je een project dat je aanspreekt? 🏡",
-    "/contact": "Liever direct chatten dan een formulier? 💬"
+    "/pricing": "Questions about pricing? I'm here to help! 💰",
+    "/contact": "Need help? Let's chat! 💬",
+    "/products": "Looking for something specific? 🔍"
   }
 }

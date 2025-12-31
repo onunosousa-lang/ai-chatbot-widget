@@ -811,26 +811,19 @@
     // Show typing indicator
     showTyping();
 
-    // Prefix language instruction if language is set
-    let messageWithLang = message;
-    if (currentLanguage) {
-      const langInstruction = currentLanguage === 'nl'
-        ? 'Antwoord in het Nederlands: '
-        : 'Answer in English: ';
-      messageWithLang = langInstruction + message;
-    }
-
     // Send to API with clientId and threadId for multi-tenant support
+    // Language preference is sent as metadata, NOT forced instruction
+    // The OpenAI Assistant handles language detection and switching
     fetch(config.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: messageWithLang,
+        message: message,
         clientId: config.clientId,
         threadId: currentThreadId,
-        language: currentLanguage
+        language: currentLanguage // Preference only, not forced
       })
     })
     .then(res => res.json())
@@ -1319,15 +1312,6 @@
 
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
-        // Prefix language instruction if language is set
-        let messageWithLang = message;
-        if (currentLanguage) {
-          const langInstruction = currentLanguage === 'nl'
-            ? 'Antwoord in het Nederlands: '
-            : 'Answer in English: ';
-          messageWithLang = langInstruction + message;
-        }
-
         // Get page context
         const pageContext = {
           url: window.location.href,
@@ -1335,16 +1319,18 @@
           referrer: document.referrer
         };
 
+        // Send message with context and language preference
+        // Language is handled by the OpenAI Assistant, not forced here
         const response = await fetch(config.apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            message: messageWithLang,
+            message: message,
             clientId: config.clientId,
             threadId: currentThreadId,
-            language: currentLanguage,
+            language: currentLanguage, // Preference only
             pageContext: pageContext
           })
         });
