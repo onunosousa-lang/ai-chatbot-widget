@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - Client Setup Guide</title>
+    <style>
+        @page {
+            margin: 2cm;
+            size: A4;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+
+        h1 {
+            color: #2ee8c2;
+            border-bottom: 4px solid #2ee8c2;
+            padding-bottom: 10px;
+            font-size: 32px;
+            margin-top: 0;
+        }
+
+        h2 {
+            color: #1661a0;
+            font-size: 24px;
+            margin-top: 30px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .step-number {
+            background: #2ee8c2;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            page-break-inside: avoid;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1661a0;
+            margin: 0 0 10px 0;
+        }
+
+        .checklist {
+            background: white;
+            padding: 15px;
+            border-left: 4px solid #2ee8c2;
+            margin: 15px 0;
+        }
+
+        .checklist-item {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .checklist-item::before {
+            content: "☐";
+            font-size: 20px;
+            margin-right: 10px;
+            color: #2ee8c2;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #1661a0;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #2ee8c2;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>AI Chatbot Service</h1>
+<h2 style="margin-top: 0; color: #666;">Step-by-Step Client Setup Guide</h2>
+
+<div class="info-box">
+    <strong>What You'll Deliver:</strong> A fully-branded AI chatbot on your client's website that captures leads 24/7 and sends them automatically via email.
+</div>
+
+<div style="margin: 30px 0;">
+    <table>
+        <tr>
+            <th>Timeline</th>
+            <th>Your Work</th>
+            <th>Client's Work</th>
+        </tr>
+        <tr>
+            <td>Day 1</td>
+            <td>Receive payment, send onboarding form</td>
+            <td>Fill form (10 min)</td>
+        </tr>
+        <tr>
+            <td>Day 2</td>
+            <td>Complete setup (2 hours)</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td>Day 3-4</td>
+            <td>Send test link</td>
+            <td>Test & approve (10 min)</td>
+        </tr>
+        <tr>
+            <td>Day 5</td>
+            <td>Send install code</td>
+            <td>Add to website (5 min)</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ======================== STEP 1 ======================== -->
+<div class="page-break"></div>
+
+<div class="step">
+    <div class="step-number">1</div>
+    <div class="step-content">
+        <div class="step-title">Get Client Information</div>
+        <p>Send this form to your client and collect all necessary details.</p>
+    </div>
+</div>
+
+<div class="checklist">
+    <strong>Client Onboarding Form:</strong>
+    <div class="checklist-item">Company name: _______________________</div>
+    <div class="checklist-item">Website URL: _______________________</div>
+    <div class="checklist-item">Primary brand color (hex): _______________________</div>
+    <div class="checklist-item">Secondary brand color (hex): _______________________</div>
+    <div class="checklist-item">Logo URL: _______________________</div>
+    <div class="checklist-item">Email for leads: _______________________</div>
+    <div class="checklist-item">WhatsApp number: _______________________</div>
+    <div class="checklist-item">Business hours: _______ to _______ (Mon-Fri)</div>
+    <div class="checklist-item">Default language: [ ] Dutch  [ ] English</div>
+</div>
+
+<!-- ======================== STEP 2 ======================== -->
+
+<div class="step">
+    <div class="step-number">2</div>
+    <div class="step-content">
+        <div class="step-title">Create Config File (15 min)</div>
+        <p>Use Claude Code or manually create <code>config.clientname.json</code></p>
+    </div>
+</div>
+
+<div class="info-box">
+    <strong>Quick Method with Claude Code:</strong><br>
+    Just say: <em>"Create config for client 'TechStartup' with primary color #7C3AED, company name 'TechStartup Inc', email hello@techstartup.com"</em>
+</div>
+
+<p><strong>Or manually:</strong></p>
+<pre>cd /path/to/ai-chatbot-widget
+cp config.template.json config.clientname.json
+# Edit the file with client details
+git add config.clientname.json
+git commit -m "Add [Client Name] config"
+git push origin main</pre>
+
+<div class="warning-box">
+    <strong>Important:</strong> Client ID must be lowercase with no spaces (e.g., "techstartup", "acmecorp")
+</div>
+
+<!-- ======================== STEP 3 ======================== -->
+<div class="page-break"></div>
+
+<div class="step">
+    <div class="step-number">3</div>
+    <div class="step-content">
+        <div class="step-title">Create OpenAI Assistant (20 min)</div>
+        <p>Set up the AI that will power the chatbot conversations.</p>
+    </div>
+</div>
+
+<div class="checklist">
+    <strong>OpenAI Assistant Setup:</strong>
+    <div class="checklist-item">Go to https://platform.openai.com/assistants</div>
+    <div class="checklist-item">Click "Create"</div>
+    <div class="checklist-item">Name: "[Client Company] Customer Support Bot"</div>
+    <div class="checklist-item">Copy instructions from ASSISTANT_INSTRUCTIONS_FINAL.md</div>
+    <div class="checklist-item">Update company name in instructions</div>
+    <div class="checklist-item">Update services/pricing in instructions</div>
+    <div class="checklist-item">Model: gpt-4-turbo-preview</div>
+    <div class="checklist-item">Enable: Function calling</div>
+    <div class="checklist-item">Add save_lead function (see below)</div>
+    <div class="checklist-item">Click "Save"</div>
+    <div class="checklist-item">COPY THE ASSISTANT ID (e.g., asst_abc123xyz)</div>
+</div>
+
+<p><strong>save_lead Function:</strong></p>
+<pre>{
+  "name": "save_lead",
+  "description": "Saves contact info when provided",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "name": {"type": "string", "description": "Full name"},
+      "email": {"type": "string", "description": "Email address"},
+      "phone": {"type": "string", "description": "Phone number"},
+      "preferred_time": {"type": "string"},
+      "notes": {"type": "string"}
+    },
+    "required": ["name", "email"]
+  }
+}</pre>
+
+<!-- ======================== STEP 4 ======================== -->
+<div class="page-break"></div>
+
+<div class="step">
+    <div class="step-number">4</div>
+    <div class="step-content">
+        <div class="step-title">Set Up Make.com Webhook (30 min)</div>
+        <p>Create automation to deliver leads to client.</p>
+    </div>
+</div>
+
+<div class="checklist">
+    <strong>Make.com Scenario Setup:</strong>
+    <div class="checklist-item">Go to https://make.com</div>
+    <div class="checklist-item">Create new scenario: "[Client Name] - Chatbot Leads"</div>
+    <div class="checklist-item">Add Webhooks module</div>
+    <div class="checklist-item">Click "Create a webhook"</div>
+    <div class="checklist-item">Name: "[Client Name] Leads"</div>
+    <div class="checklist-item">COPY WEBHOOK URL</div>
+    <div class="checklist-item">Add Email module after webhook</div>
+    <div class="checklist-item">Configure email (see template below)</div>
+    <div class="checklist-item">Click "Save"</div>
+    <div class="checklist-item">Toggle to "Active"</div>
+</div>
+
+<p><strong>Email Configuration:</strong></p>
+<table>
+    <tr>
+        <th>Field</th>
+        <th>Value</th>
+    </tr>
+    <tr>
+        <td>To</td>
+        <td>{{client email}}</td>
+    </tr>
+    <tr>
+        <td>Subject</td>
+        <td>🔥 New Lead from Website Chat</td>
+    </tr>
+    <tr>
+        <td>Body</td>
+        <td>
+            Name: {{1.name}}<br>
+            Email: {{1.email}}<br>
+            Phone: {{1.phone}}<br>
+            <br>
+            Conversation:<br>
+            {{1.conversationSummary}}<br>
+            <br>
+            Time: {{1.timestamp}}
+        </td>
+    </tr>
+</table>
+
+<!-- ======================== STEP 5 ======================== -->
+<div class="page-break"></div>
+
+<div class="step">
+    <div class="step-number">5</div>
+    <div class="step-content">
+        <div class="step-title">Add to Vercel (10 min)</div>
+        <p>Configure environment variables for this client.</p>
+    </div>
+</div>
+
+<div class="checklist">
+    <strong>Vercel Configuration:</strong>
+    <div class="checklist-item">Go to https://vercel.com/dashboard</div>
+    <div class="checklist-item">Select project: ai-chatbot-widget</div>
+    <div class="checklist-item">Go to Settings → Environment Variables</div>
+    <div class="checklist-item">Add CLIENT_CLIENTNAME_ASSISTANT_ID</div>
+    <div class="checklist-item">Paste Assistant ID from Step 3</div>
+    <div class="checklist-item">Add CLIENT_CLIENTNAME_WEBHOOK_URL</div>
+    <div class="checklist-item">Paste webhook URL from Step 4</div>
+    <div class="checklist-item">Click "Save"</div>
+    <div class="checklist-item">Go to Deployments → Redeploy</div>
+    <div class="checklist-item">Wait 2-3 minutes for deployment</div>
+</div>
+
+<div class="warning-box">
+    <strong>Important:</strong> Replace <code>CLIENTNAME</code> with the client ID in UPPERCASE.<br>
+    Example: If clientId is "techstartup", use <code>CLIENT_TECHSTARTUP_ASSISTANT_ID</code>
+</div>
+
+<p><strong>Example:</strong></p>
+<pre>CLIENT_TECHSTARTUP_ASSISTANT_ID = asst_abc123xyz
+CLIENT_TECHSTARTUP_WEBHOOK_URL = https://hook.eu1.make.com/xyz123</pre>
+
+<!-- ======================== STEP 6 ======================== -->
+<div class="page-break"></div>
+
+<div class="step">
+    <div class="step-number">6</div>
+    <div class="step-content">
+        <div class="step-title">Test Everything (30 min)</div>
+        <p>Verify all features work before sending to client.</p>
+    </div>
+</div>
+
+<div class="checklist">
+    <strong>Testing Checklist:</strong>
+    <div class="checklist-item">Logo displays correctly</div>
+    <div class="checklist-item">Colors match brand</div>
+    <div class="checklist-item">Welcome message shows</div>
+    <div class="checklist-item">Chat opens/closes smoothly</div>
+    <div class="checklist-item">Bot responds (3-5 seconds)</div>
+    <div class="checklist-item">Test Dutch conversation</div>
+    <div class="checklist-item">Test English conversation</div>
+    <div class="checklist-item">Language stays consistent</div>
+    <div class="checklist-item">Bot provides options after answers</div>
+    <div class="checklist-item">Provide test contact: "John Doe, john@test.com"</div>
+    <div class="checklist-item">Lead arrives via email (check within 1 min)</div>
+    <div class="checklist-item">Conversation summary included in email</div>
+    <div class="checklist-item">Test on mobile phone</div>
+    <div class="checklist-item">Email/WhatsApp buttons work</div>
+</div>
+
+<p><strong>Test URL:</strong></p>
+<pre>https://ai-chatbot-widget-eight.vercel.app/examples/basic.html?config=config.clientname.json</pre>
+
+<!-- ======================== STEP 7 ======================== -->
+<div class="page-break"></div>
+
+<div class="step">
+    <div class="step-number">7</div>
+    <div class="step-content">
+        <div class="step-title">Send to Client for Approval</div>
+        <p>Let client test before going live.</p>
+    </div>
+</div>
+
+<div class="success-box">
+    <strong>Email Template:</strong><br><br>
+    <strong>Subject:</strong> Your Chatbot is Ready for Review! 🎉<br><br>
+
+    Hi [Name],<br><br>
+
+    Your AI chatbot is ready to test!<br><br>
+
+    <strong>Test Link:</strong> [paste test URL]<br><br>
+
+    <strong>Please test:</strong><br>
+    1. Open the chat (bottom right)<br>
+    2. Ask a few questions in Dutch/English<br>
+    3. Provide test contact details<br>
+    4. Check your email for the lead<br>
+    5. Test on your phone<br><br>
+
+    Reply with any changes or confirmation to proceed!<br><br>
+
+    Best regards
+</div>
+
+<!-- ======================== STEP 8 ======================== -->
+
+<div class="step">
+    <div class="step-number">8</div>
+    <div class="step-content">
+        <div class="step-title">Client Installs on Website</div>
+        <p>Send simple installation code.</p>
+    </div>
+</div>
+
+<div class="success-box">
+    <strong>Email Template:</strong><br><br>
+    <strong>Subject:</strong> Installation Code - Add to Your Website<br><br>
+
+    Hi [Name],<br><br>
+
+    Here's the installation code. Your webmaster just needs to add this ONE LINE:<br><br>
+
+    <pre>&lt;script
+  src="https://ai-chatbot-widget-eight.vercel.app/chatbot.js"
+  data-config="https://ai-chatbot-widget-eight.vercel.app/config.clientname.json"&gt;
+&lt;/script&gt;</pre>
+
+    <strong>Where to add:</strong> In the &lt;head&gt; section or before &lt;/body&gt;<br><br>
+
+    <strong>WordPress:</strong> Use "Insert Headers and Footers" plugin<br>
+    <strong>Shopify:</strong> theme.liquid file<br><br>
+
+    Reply when installed and I'll verify!
+</div>
+
+<!-- ======================== STEP 9 ======================== -->
+<div class="page-break"></div>
+
+<div class="step">
+    <div class="step-number">9</div>
+    <div class="step-content">
+        <div class="step-title">Verify & Confirm Go-Live</div>
+        <p>Check installation on client's website.</p>
+    </div>
+</div>
+
+<div class="checklist">
+    <strong>Final Verification:</strong>
+    <div class="checklist-item">Visit client's website</div>
+    <div class="checklist-item">Chat widget visible (bottom right)</div>
+    <div class="checklist-item">Send test message</div>
+    <div class="checklist-item">Bot responds correctly</div>
+    <div class="checklist-item">Test lead capture</div>
+    <div class="checklist-item">Verify lead email arrives</div>
+    <div class="checklist-item">Test on mobile browser</div>
+</div>
+
+<div class="success-box">
+    <strong>Confirmation Email:</strong><br><br>
+    Subject: ✅ Chatbot is Live!<br><br>
+
+    Hi [Name],<br><br>
+
+    Confirmed! Your AI chatbot is live on [website] 🎉<br><br>
+
+    <strong>What's working:</strong><br>
+    ✓ 24/7 AI responses<br>
+    ✓ Automatic lead capture<br>
+    ✓ Leads sent to [email]<br>
+    ✓ Mobile optimized<br><br>
+
+    I'll check in next week. Any questions, just reply!<br><br>
+
+    Welcome aboard!
+</div>
+
+<!-- ======================== ONGOING ======================== -->
+<div class="page-break"></div>
+
+<h2>Ongoing Support</h2>
+
+<div class="step">
+    <div class="step-number">10</div>
+    <div class="step-content">
+        <div class="step-title">Week 1 Check-in</div>
+        <p>Follow up after first week.</p>
+    </div>
+</div>
+
+<div class="info-box">
+    <strong>Check-in Email (Day 7):</strong><br><br>
+
+    Hi [Name],<br><br>
+
+    Quick check-in! How's the chatbot working?<br><br>
+
+    1. How many leads so far?<br>
+    2. Good quality?<br>
+    3. Any adjustments needed?<br><br>
+
+    Let me know!
+</div>
+
+<div class="step">
+    <div class="step-number">11</div>
+    <div class="step-content">
+        <div class="step-title">Month 1 Review</div>
+        <p>Send monthly report and invoice.</p>
+    </div>
+</div>
+
+<table>
+    <tr>
+        <th>Metric</th>
+        <th>Track</th>
+    </tr>
+    <tr>
+        <td>Conversations Started</td>
+        <td>[Track in OpenAI logs]</td>
+    </tr>
+    <tr>
+        <td>Leads Captured</td>
+        <td>[Count emails sent]</td>
+    </tr>
+    <tr>
+        <td>Conversion Rate</td>
+        <td>Leads ÷ Conversations</td>
+    </tr>
+    <tr>
+        <td>Most Common Questions</td>
+        <td>[Review conversations]</td>
+    </tr>
+</table>
+
+<!-- ======================== PRICING ======================== -->
+<div class="page-break"></div>
+
+<h2>Pricing & Economics</h2>
+
+<table>
+    <tr>
+        <th>Item</th>
+        <th>Amount</th>
+    </tr>
+    <tr>
+        <td><strong>Setup Fee (one-time)</strong></td>
+        <td>€299</td>
+    </tr>
+    <tr>
+        <td><strong>Monthly Subscription</strong></td>
+        <td>€99/month</td>
+    </tr>
+</table>
+
+<h3 style="margin-top: 30px;">Your Costs Per Client</h3>
+
+<table>
+    <tr>
+        <th>Service</th>
+        <th>Cost/Month</th>
+    </tr>
+    <tr>
+        <td>OpenAI API</td>
+        <td>€5-15</td>
+    </tr>
+    <tr>
+        <td>Make.com</td>
+        <td>€0 (free tier)</td>
+    </tr>
+    <tr>
+        <td>Vercel</td>
+        <td>€0 (free tier)</td>
+    </tr>
+    <tr>
+        <td><strong>Total Costs</strong></td>
+        <td><strong>~€10/month</strong></td>
+    </tr>
+</table>
+
+<h3 style="margin-top: 30px;">Revenue Projection</h3>
+
+<table>
+    <tr>
+        <th>Clients</th>
+        <th>Monthly Revenue</th>
+        <th>Monthly Costs</th>
+        <th>Monthly Profit</th>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>€495</td>
+        <td>€50</td>
+        <td>€445</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>€990</td>
+        <td>€100</td>
+        <td>€890</td>
+    </tr>
+    <tr>
+        <td>25</td>
+        <td>€2,475</td>
+        <td>€250</td>
+        <td>€2,225</td>
+    </tr>
+    <tr>
+        <td>50</td>
+        <td>€4,950</td>
+        <td>€500</td>
+        <td>€4,450</td>
+    </tr>
+</table>
+
+<!-- ======================== TROUBLESHOOTING ======================== -->
+<div class="page-break"></div>
+
+<h2>Common Issues & Solutions</h2>
+
+<div style="margin: 20px 0;">
+    <h3>❌ Chat widget not appearing</h3>
+    <div class="info-box">
+        <strong>Solutions:</strong><br>
+        • Check script tag is in &lt;head&gt; or before &lt;/body&gt;<br>
+        • Check browser console for errors (F12)<br>
+        • Verify config file URL is correct<br>
+        • Clear browser cache
+    </div>
+</div>
+
+<div style="margin: 20px 0;">
+    <h3>❌ Bot not responding</h3>
+    <div class="info-box">
+        <strong>Solutions:</strong><br>
+        • Check OpenAI API key is valid and has credits<br>
+        • Verify Assistant ID in Vercel env vars<br>
+        • Check OpenAI assistant is active<br>
+        • Review OpenAI API logs for errors
+    </div>
+</div>
+
+<div style="margin: 20px 0;">
+    <h3>❌ Leads not arriving</h3>
+    <div class="info-box">
+        <strong>Solutions:</strong><br>
+        • Check Make.com scenario is "Active"<br>
+        • Verify webhook URL in Vercel is correct<br>
+        • Check Make.com execution history for errors<br>
+        • Test webhook manually in Make.com<br>
+        • Verify client's email address is correct
+    </div>
+</div>
+
+<div style="margin: 20px 0;">
+    <h3>❌ Wrong language</h3>
+    <div class="info-box">
+        <strong>Solutions:</strong><br>
+        • Check assistant instructions are updated<br>
+        • Verify no hardcoded language in chatbot.js<br>
+        • Language should match user's first message<br>
+        • Review assistant instructions for language lock rules
+    </div>
+</div>
+
+<!-- ======================== QUICK REFERENCE ======================== -->
+<div class="page-break"></div>
+
+<h2>Quick Reference Checklist</h2>
+
+<div style="columns: 2; column-gap: 30px;">
+    <div class="checklist">
+        <h3>Per Client Setup (2 hours)</h3>
+        <div class="checklist-item">Get client info (form)</div>
+        <div class="checklist-item">Create config.clientname.json</div>
+        <div class="checklist-item">Git commit & push</div>
+        <div class="checklist-item">Create OpenAI Assistant</div>
+        <div class="checklist-item">Copy Assistant ID</div>
+        <div class="checklist-item">Create Make.com scenario</div>
+        <div class="checklist-item">Copy webhook URL</div>
+        <div class="checklist-item">Add Vercel env vars</div>
+        <div class="checklist-item">Redeploy Vercel</div>
+        <div class="checklist-item">Test thoroughly</div>
+        <div class="checklist-item">Send test link to client</div>
+        <div class="checklist-item">Get approval</div>
+        <div class="checklist-item">Send install code</div>
+        <div class="checklist-item">Verify on live site</div>
+        <div class="checklist-item">Send confirmation</div>
+    </div>
+</div>
+
+<h2 style="margin-top: 40px;">Important URLs</h2>
+
+<table>
+    <tr>
+        <th>Service</th>
+        <th>URL</th>
+    </tr>
+    <tr>
+        <td>OpenAI Assistants</td>
+        <td>https://platform.openai.com/assistants</td>
+    </tr>
+    <tr>
+        <td>Make.com</td>
+        <td>https://make.com</td>
+    </tr>
+    <tr>
+        <td>Vercel Dashboard</td>
+        <td>https://vercel.com/dashboard</td>
+    </tr>
+    <tr>
+        <td>Your Chatbot</td>
+        <td>https://ai-chatbot-widget-eight.vercel.app</td>
+    </tr>
+</table>
+
+<!-- ======================== FOOTER ======================== -->
+<div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #2ee8c2; text-align: center; color: #666;">
+    <p><strong>AI Chatbot Service - Professional Setup Guide</strong></p>
+    <p>For support: Refer to PROFESSIONAL_CLIENT_DELIVERY_GUIDE.md</p>
+</div>
+
+<script>
+// Print instructions (for no-print class)
+document.addEventListener('DOMContentLoaded', function() {
+    const printBtn = document.createElement('button');
+    printBtn.textContent = 'Print to PDF';
+    printBtn.className = 'no-print';
+    printBtn.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 15px 30px; background: #2ee8c2; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 9999;';
+    printBtn.onclick = () => window.print();
+    document.body.appendChild(printBtn);
+});
+</script>
+
+</body>
+</html>
