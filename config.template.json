@@ -1,0 +1,57 @@
+{
+  "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
+  "clientId": "CHANGE_ME",
+
+  "primaryColor": "#2ee8c2",
+  "secondaryColor": "#1661a0",
+  "companyName": "Your Company Name",
+  "welcomeMessage": "Hi! How can I help you today? 👋",
+  "placeholder": "Type your message...",
+  "position": "bottom-right",
+
+  "logo": "https://example.com/logo.png",
+  "emailButton": true,
+  "whatsappButton": true,
+  "emailAddress": "contact@example.com",
+  "whatsappNumber": "+31612345678",
+
+  "buttonSize": "60px",
+  "chatHeight": "450px",
+  "chatWidth": "380px",
+  "zIndex": 9999,
+
+  "conversationStarters": [
+    "💰 Pricing information",
+    "📞 Schedule a call",
+    "❓ How does it work?",
+    "🚀 Get started"
+  ],
+
+  "showLanguageSelector": true,
+  "languages": ["nl", "en"],
+  "defaultLanguage": "nl",
+
+  "proactiveTrigger": true,
+  "socialProof": true,
+  "calendlyUrl": null,
+
+  "enableSound": true,
+  "enableSessionPersistence": true,
+  "enableAnalytics": true,
+  "enableTypingDelay": true,
+  "showRating": true,
+  "detectReturningUsers": true,
+
+  "businessHours": {
+    "start": "09:00",
+    "end": "17:00",
+    "days": [1, 2, 3, 4, 5],
+    "timezone": "Europe/Amsterdam"
+  },
+
+  "pageSpecificTriggers": {
+    "/pricing": "Questions about pricing? I'm here to help! 💰",
+    "/contact": "Need help? Let's chat! 💬",
+    "/products": "Looking for something specific? 🔍"
+  }
+}
