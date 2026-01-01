@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ChatMate - AI Chatbot voor je website. Automatische leads, 24/7 beschikbaar. Installatie in 48 uur. Vanaf €99/maand.">
+    <meta name="keywords" content="AI chatbot, website chat, leads, chatbot Nederland, klantenservice, automatisering">
+    <title>ChatMate - AI Chatbot voor Meer Leads | Vanaf €99/maand</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="ChatMate - AI Chatbot voor je Website">
+    <meta property="og:description" content="Meer leads met AI. Installatie in 48 uur. Vanaf €99/maand.">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2ee8c2;
+            --secondary: #1661a0;
+            --accent: #ff6b6b;
+            --dark: #2d3748;
+            --gray: #4a5568;
+            --light-gray: #e2e8f0;
+            --bg: #f7fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--bg);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .lang-switch {
+            background: var(--light-gray);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .lang-switch:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: var(--white);
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .hero-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--secondary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--secondary);
+        }
+
+        /* Stats Bar */
+        .stats {
+            background: var(--white);
+            padding: 40px 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            color: var(--gray);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+            background: var(--bg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .section-title p {
+            font-size: 18px;
+            color: var(--gray);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 20px;
+            background: var(--white);
+        }
+
+        .steps {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            min-width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .step-content h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 80px 20px;
+            background: var(--bg);
+        }
+
+        .pricing-cards {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 3px solid var(--primary);
+            transform: scale(1.05);
+        }
+
+        .popular-badge {
+            background: var(--accent);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .pricing-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .price span {
+            font-size: 18px;
+            color: var(--gray);
+        }
+
+        .price-description {
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .features-list li {
+            padding: 10px 0;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-list li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        /* Demo Section */
+        .demo {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .demo h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .demo p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 20px;
+            background: var(--white);
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--dark);
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .author-info h4 {
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .author-info p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 20px;
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .step {
+                flex-direction: column;
+            }
+
+            .section-title h2 {
+                font-size: 32px;
+            }
+        }
+
+        /* Language toggle active state */
+        [data-lang="nl"] .lang-en,
+        [data-lang="en"] .lang-nl {
+            display: none;
+        }
+    </style>
+</head>
+<body data-lang="nl">
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span>💬</span>
+                <span>ChatMate</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features" class="lang-nl">Functies</a>
+                <a href="#features" class="lang-en">Features</a>
+
+                <a href="#pricing" class="lang-nl">Prijzen</a>
+                <a href="#pricing" class="lang-en">Pricing</a>
+
+                <a href="#demo" class="lang-nl">Demo</a>
+                <a href="#demo" class="lang-en">Demo</a>
+
+                <button class="lang-switch" onclick="toggleLanguage()">
+                    <span class="lang-nl">🇬🇧 EN</span>
+                    <span class="lang-en">🇳🇱 NL</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1 class="lang-nl">Meer Leads met AI Chat</h1>
+            <h1 class="lang-en">More Leads with AI Chat</h1>
+
+            <p class="lang-nl">
+                24/7 automatische gesprekken met bezoekers.<br>
+                Verzamel leads terwijl je slaapt. Installatie in 48 uur.
+            </p>
+            <p class="lang-en">
+                24/7 automated conversations with visitors.<br>
+                Collect leads while you sleep. Installation in 48 hours.
+            </p>
+
+            <div class="cta-buttons">
+                <a href="#demo" class="btn btn-primary lang-nl">Probeer Gratis Demo</a>
+                <a href="#demo" class="btn btn-primary lang-en">Try Free Demo</a>
+
+                <a href="#pricing" class="btn btn-secondary lang-nl">Bekijk Prijzen</a>
+                <a href="#pricing" class="btn btn-secondary lang-en">View Pricing</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p class="lang-nl">Beschikbaar</p>
+                <p class="lang-en">Available</p>
+            </div>
+            <div class="stat-item">
+                <h3>48u</h3>
+                <p class="lang-nl">Installatie</p>
+                <p class="lang-en">Installation</p>
+            </div>
+            <div class="stat-item">
+                <h3>3-5x</h3>
+                <p class="lang-nl">Meer Conversies</p>
+                <p class="lang-en">More Conversions</p>
+            </div>
+            <div class="stat-item">
+                <h3>€99</h3>
+                <p class="lang-nl">Per Maand</p>
+                <p class="lang-en">Per Month</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-title">
+            <h2 class="lang-nl">Waarom ChatMate?</h2>
+            <h2 class="lang-en">Why ChatMate?</h2>
+
+            <p class="lang-nl">Alles wat je nodig hebt voor meer leads</p>
+            <p class="lang-en">Everything you need for more leads</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3 class="lang-nl">Natuurlijke Gesprekken</h3>
+                <h3 class="lang-en">Natural Conversations</h3>
+
+                <p class="lang-nl">
+                    Onze AI begrijpt context en beantwoordt vragen zoals een echt persoon.
+                    Geen robotachtige antwoorden meer.
+                </p>
+                <p class="lang-en">
+                    Our AI understands context and answers like a real person.
+                    No more robotic responses.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📧</div>
+                <h3 class="lang-nl">Automatische Leads</h3>
+                <h3 class="lang-en">Automatic Leads</h3>
+
+                <p class="lang-nl">
+                    Elk gesprek wordt een potentiële lead. Ontvang contactgegevens
+                    direct in je inbox met volledige gespreksgeschiedenis.
+                </p>
+                <p class="lang-en">
+                    Every conversation is a potential lead. Receive contact details
+                    directly in your inbox with full conversation history.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="lang-nl">Mobiel Perfect</h3>
+                <h3 class="lang-en">Mobile Perfect</h3>
+
+                <p class="lang-nl">
+                    50%+ van je bezoekers komt via mobiel. Onze chat werkt
+                    feilloos op elk apparaat met swipe-to-close.
+                </p>
+                <p class="lang-en">
+                    50%+ of your visitors come via mobile. Our chat works
+                    flawlessly on every device with swipe-to-close.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3 class="lang-nl">Meertalig</h3>
+                <h3 class="lang-en">Multilingual</h3>
+
+                <p class="lang-nl">
+                    Ondersteunt Nederlands, Engels, Frans en Portugees.
+                    De AI detecteert automatisch de taal van je bezoeker.
+                </p>
+                <p class="lang-en">
+                    Supports Dutch, English, French and Portuguese.
+                    AI automatically detects your visitor's language.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="lang-nl">Slimme Opties</h3>
+                <h3 class="lang-en">Smart Options</h3>
+
+                <p class="lang-nl">
+                    Na elk antwoord krijgen bezoekers relevante vervolgopties.
+                    Dit verhoogt engagement met 73%.
+                </p>
+                <p class="lang-en">
+                    After each answer, visitors get relevant follow-up options.
+                    This increases engagement by 73%.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3 class="lang-nl">Sessie Geheugen</h3>
+                <h3 class="lang-en">Session Memory</h3>
+
+                <p class="lang-nl">
+                    Gesprekken worden bewaard. Bezoekers kunnen later terugkomen
+                    en verder gaan waar ze gebleven waren.
+                </p>
+                <p class="lang-en">
+                    Conversations are saved. Visitors can return later
+                    and continue where they left off.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how" class="how-it-works">
+        <div class="section-title">
+            <h2 class="lang-nl">Hoe Het Werkt</h2>
+            <h2 class="lang-en">How It Works</h2>
+
+            <p class="lang-nl">Van aanmelding tot live in 3 simpele stappen</p>
+            <p class="lang-en">From signup to live in 3 simple steps</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 class="lang-nl">Aanmelden & Personaliseren</h3>
+                    <h3 class="lang-en">Sign Up & Customize</h3>
+
+                    <p class="lang-nl">
+                        Vul een simpel formulier in met je bedrijfsgegevens, kleuren en logo.
+                        Wij maken de chatbot klaar met jouw branding. Duurt 10 minuten.
+                    </p>
+                    <p class="lang-en">
+                        Fill in a simple form with your company details, colors and logo.
+                        We prepare the chatbot with your branding. Takes 10 minutes.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 class="lang-nl">Wij Installeren</h3>
+                    <h3 class="lang-en">We Install</h3>
+
+                    <p class="lang-nl">
+                        We maken je chatbot klaar, testen alles en sturen je een link om te testen.
+                        Na goedkeuring installeer je met 1 regel code. Of wij doen het voor je!
+                    </p>
+                    <p class="lang-en">
+                        We prepare your chatbot, test everything and send you a link to test.
+                        After approval, install with 1 line of code. Or we do it for you!
+                    </p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 class="lang-nl">Leads Ontvangen</h3>
+                    <h3 class="lang-en">Receive Leads</h3>
+
+                    <p class="lang-nl">
+                        Vanaf nu ontvang je elke lead direct in je inbox met volledige gespreksgeschiedenis.
+                        We sturen ook een wekelijks rapport met statistieken.
+                    </p>
+                    <p class="lang-en">
+                        From now on, receive every lead directly in your inbox with full conversation history.
+                        We also send a weekly report with statistics.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="section-title">
+            <h2 class="lang-nl">Transparante Prijzen</h2>
+            <h2 class="lang-en">Transparent Pricing</h2>
+
+            <p class="lang-nl">Geen verborgen kosten. Stop wanneer je wilt.</p>
+            <p class="lang-en">No hidden costs. Cancel anytime.</p>
+        </div>
+
+        <div class="pricing-cards">
+            <div class="pricing-card">
+                <h3 class="lang-nl">Starter</h3>
+                <h3 class="lang-en">Starter</h3>
+
+                <div class="price">
+                    €99
+                    <span class="lang-nl">/maand</span>
+                    <span class="lang-en">/month</span>
+                </div>
+
+                <p class="price-description lang-nl">+ €299 eenmalige setup</p>
+                <p class="price-description lang-en">+ €299 one-time setup</p>
+
+                <ul class="features-list">
+                    <li class="lang-nl">Onbeperkte gesprekken</li>
+                    <li class="lang-en">Unlimited conversations</li>
+
+                    <li class="lang-nl">Email notificaties</li>
+                    <li class="lang-en">Email notifications</li>
+
+                    <li class="lang-nl">Meertalig (NL/EN/FR/PT)</li>
+                    <li class="lang-en">Multilingual (NL/EN/FR/PT)</li>
+
+                    <li class="lang-nl">Mobiel geoptimaliseerd</li>
+                    <li class="lang-en">Mobile optimized</li>
+
+                    <li class="lang-nl">24/7 beschikbaar</li>
+                    <li class="lang-en">24/7 available</li>
+
+                    <li class="lang-nl">Email support</li>
+                    <li class="lang-en">Email support</li>
+                </ul>
+
+                <a href="#demo" class="btn btn-secondary lang-nl">Start Nu</a>
+                <a href="#demo" class="btn btn-secondary lang-en">Get Started</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="popular-badge">
+                    <span class="lang-nl">Populair</span>
+                    <span class="lang-en">Popular</span>
+                </div>
+
+                <h3>Pro</h3>
+
+                <div class="price">
+                    €149
+                    <span class="lang-nl">/maand</span>
+                    <span class="lang-en">/month</span>
+                </div>
+
+                <p class="price-description lang-nl">+ €299 eenmalige setup</p>
+                <p class="price-description lang-en">+ €299 one-time setup</p>
+
+                <ul class="features-list">
+                    <li class="lang-nl">Alles van Starter</li>
+                    <li class="lang-en">Everything from Starter</li>
+
+                    <li class="lang-nl">Google Sheets integratie</li>
+                    <li class="lang-en">Google Sheets integration</li>
+
+                    <li class="lang-nl">CRM integratie (HubSpot/Pipedrive)</li>
+                    <li class="lang-en">CRM integration (HubSpot/Pipedrive)</li>
+
+                    <li class="lang-nl">WhatsApp notificaties</li>
+                    <li class="lang-en">WhatsApp notifications</li>
+
+                    <li class="lang-nl">Maandelijks rapport</li>
+                    <li class="lang-en">Monthly report</li>
+
+                    <li class="lang-nl">Priority support</li>
+                    <li class="lang-en">Priority support</li>
+                </ul>
+
+                <a href="#demo" class="btn btn-primary lang-nl">Start Nu</a>
+                <a href="#demo" class="btn btn-primary lang-en">Get Started</a>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+
+                <div class="price">
+                    <span class="lang-nl">Op Maat</span>
+                    <span class="lang-en">Custom</span>
+                </div>
+
+                <p class="price-description lang-nl">Voor grotere organisaties</p>
+                <p class="price-description lang-en">For larger organizations</p>
+
+                <ul class="features-list">
+                    <li class="lang-nl">Alles van Pro</li>
+                    <li class="lang-en">Everything from Pro</li>
+
+                    <li class="lang-nl">Custom AI training</li>
+                    <li class="lang-en">Custom AI training</li>
+
+                    <li class="lang-nl">Dedicated account manager</li>
+                    <li class="lang-en">Dedicated account manager</li>
+
+                    <li class="lang-nl">SLA garantie</li>
+                    <li class="lang-en">SLA guarantee</li>
+
+                    <li class="lang-nl">White-label optie</li>
+                    <li class="lang-en">White-label option</li>
+
+                    <li class="lang-nl">24/7 telefoon support</li>
+                    <li class="lang-en">24/7 phone support</li>
+                </ul>
+
+                <a href="#demo" class="btn btn-secondary lang-nl">Neem Contact Op</a>
+                <a href="#demo" class="btn btn-secondary lang-en">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="section-title">
+            <h2 class="lang-nl">Wat Klanten Zeggen</h2>
+            <h2 class="lang-en">What Customers Say</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text lang-nl">
+                    "15 leads in de eerste week! ChatMate heeft onze website getransformeerd.
+                    De installatie was super makkelijk en de resultaten spreken voor zich."
+                </p>
+                <p class="testimonial-text lang-en">
+                    "15 leads in the first week! ChatMate transformed our website.
+                    Installation was super easy and the results speak for themselves."
+                </p>
+
+                <div class="testimonial-author">
+                    <div class="author-avatar">JD</div>
+                    <div class="author-info">
+                        <h4>Jan de Vries</h4>
+                        <p>Groenvastbouw</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <p class="testimonial-text lang-nl">
+                    "Eindelijk een chatbot die echt werkt. Bezoekers blijven langer op onze site
+                    en we krijgen veel meer kwalitatieve leads dan voorheen."
+                </p>
+                <p class="testimonial-text lang-en">
+                    "Finally a chatbot that actually works. Visitors stay longer on our site
+                    and we get much more quality leads than before."
+                </p>
+
+                <div class="testimonial-author">
+                    <div class="author-avatar">SM</div>
+                    <div class="author-info">
+                        <h4>Sarah Mulder</h4>
+                        <p>TechStartup B.V.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <p class="testimonial-text lang-nl">
+                    "De ROI is ongelooflijk. Voor €99/maand krijgen we meer leads dan met onze
+                    oude systeem van €500/maand. Plus de installatie was in één dag klaar!"
+                </p>
+                <p class="testimonial-text lang-en">
+                    "The ROI is incredible. For €99/month we get more leads than with our
+                    old €500/month system. Plus installation was done in one day!"
+                </p>
+
+                <div class="testimonial-author">
+                    <div class="author-avatar">PB</div>
+                    <div class="author-info">
+                        <h4>Peter Bakker</h4>
+                        <p>Bakker Makelaardij</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo">
+        <h2 class="lang-nl">Probeer de Demo</h2>
+        <h2 class="lang-en">Try the Demo</h2>
+
+        <p class="lang-nl">
+            Klik rechtsonder om de chatbot uit te proberen!<br>
+            Zie zelf hoe natuurlijk en effectief het werkt.
+        </p>
+        <p class="lang-en">
+            Click bottom right to try the chatbot!<br>
+            See for yourself how natural and effective it works.
+        </p>
+
+        <div class="cta-buttons">
+            <a href="mailto:info@chatmate.nl" class="btn btn-primary lang-nl">Start Gratis Proefperiode</a>
+            <a href="mailto:info@chatmate.nl" class="btn btn-primary lang-en">Start Free Trial</a>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <h2 class="lang-nl">Klaar om Meer Leads te Krijgen?</h2>
+        <h2 class="lang-en">Ready to Get More Leads?</h2>
+
+        <p class="lang-nl">
+            Installatie in 48 uur. Geen contract. Stop wanneer je wilt.
+        </p>
+        <p class="lang-en">
+            Installation in 48 hours. No contract. Cancel anytime.
+        </p>
+
+        <a href="mailto:info@chatmate.nl" class="btn btn-primary lang-nl">Neem Contact Op</a>
+        <a href="mailto:info@chatmate.nl" class="btn btn-primary lang-en">Contact Us</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>ChatMate</h4>
+                <p class="lang-nl">AI Chatbot voor meer leads</p>
+                <p class="lang-en">AI Chatbot for more leads</p>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="lang-nl">Product</h4>
+                <h4 class="lang-en">Product</h4>
+                <ul>
+                    <li><a href="#features" class="lang-nl">Functies</a></li>
+                    <li><a href="#features" class="lang-en">Features</a></li>
+
+                    <li><a href="#pricing" class="lang-nl">Prijzen</a></li>
+                    <li><a href="#pricing" class="lang-en">Pricing</a></li>
+
+                    <li><a href="#demo">Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="lang-nl">Bedrijf</h4>
+                <h4 class="lang-en">Company</h4>
+                <ul>
+                    <li><a href="mailto:info@chatmate.nl" class="lang-nl">Contact</a></li>
+                    <li><a href="mailto:info@chatmate.nl" class="lang-en">Contact</a></li>
+
+                    <li><a href="#" class="lang-nl">Privacy</a></li>
+                    <li><a href="#" class="lang-en">Privacy</a></li>
+
+                    <li><a href="#" class="lang-nl">Voorwaarden</a></li>
+                    <li><a href="#" class="lang-en">Terms</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 class="lang-nl">Markten</h4>
+                <h4 class="lang-en">Markets</h4>
+                <ul>
+                    <li>🇳🇱 Nederland</li>
+                    <li>🇧🇪 België</li>
+                    <li>🇫🇷 France</li>
+                    <li>🇵🇹 Portugal</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 ChatMate. <span class="lang-nl">Alle rechten voorbehouden.</span><span class="lang-en">All rights reserved.</span></p>
+        </div>
+    </footer>
+
+    <!-- ChatMate Widget -->
+    <script
+        src="https://ai-chatbot-widget-eight.vercel.app/chatbot.js"
+        data-config="https://ai-chatbot-widget-eight.vercel.app/config.demo.json">
+    </script>
+
+    <!-- Language Switcher Script -->
+    <script>
+        function toggleLanguage() {
+            const currentLang = document.body.getAttribute('data-lang');
+            const newLang = currentLang === 'nl' ? 'en' : 'nl';
+            document.body.setAttribute('data-lang', newLang);
+
+            // Save preference
+            localStorage.setItem('preferred-language', newLang);
+        }
+
+        // Load saved language preference
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferred-language');
+            if (savedLang) {
+                document.body.setAttribute('data-lang', savedLang);
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
