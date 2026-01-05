@@ -4,7 +4,7 @@
   "primaryColor": "#00D084",
   "secondaryColor": "#00A86B",
   "companyName": "Groenvast Bouw",
-  "welcomeMessage": "...",
+  "welcomeMessage": "Welkom bij Groenvastbouw! Hoe kan ik je helpen?",
   "placeholder": "Type je bericht...",
   "position": "bottom-right",
   "logo": "https://groenvastbouw.nl/wp-content/uploads/2023/01/groenvast-logo.png",
@@ -16,7 +16,11 @@
   "chatHeight": "450px",
   "chatWidth": "380px",
   "zIndex": 9999,
-  "conversationStarters": [],
+  "conversationStarters": [
+    "Prijsindicatie voor mijn project",
+    "Referentieprojecten bekijken",
+    "Contact opnemen"
+  ],
   "showLanguageSelector": true,
   "languages": ["nl", "en"],
   "defaultLanguage": "nl",
@@ -39,5 +43,53 @@
     "/pricing": "Vragen over prijzen? Ik help je graag! 💰",
     "/portfolio": "Zie je een project dat je aanspreekt? 🏡",
     "/contact": "Liever direct chatten dan een formulier? 💬"
+  },
+  "messages": {
+    "nl": {
+      "welcomeBack": "Welkom terug! Hoe kan ik je vandaag helpen? 👋",
+      "businessHoursOnline": "Online nu",
+      "businessHoursOffline": "Offline - Reageren binnen 24u",
+      "languageChanged": "Taal gewijzigd naar",
+      "errorGeneric": "Sorry, er ging iets mis. Probeer het later opnieuw.",
+      "errorNoResponse": "Sorry, ik kon dat niet begrijpen.",
+      "errorConnection": "❌ Kan geen verbinding maken. Probeer het later opnieuw.",
+      "retryAttempt": "⚠️ Verbinding probleem. Nieuwe poging...",
+      "emailSubject": "Contact via Groenvastbouw Chatbot",
+      "whatsappMessage": "Hallo! Ik heb een vraag over passiefbouw.",
+      "proactiveTriggers": [
+        "Heb je een vraag? Ik help je graag! 💬",
+        "Wacht! Heb je nog vragen? 🤔",
+        "Zie je iets interessants? Vraag het me! 💡"
+      ],
+      "socialProof": [
+        "💬 Jan uit Utrecht kreeg net een offerte",
+        "✅ 15 mensen gebruikten deze week de chatbot",
+        "⭐ Gemiddelde beoordeling: 4.8/5",
+        "🏡 Wij bouwden 23 passieve huizen in 2024"
+      ]
+    },
+    "en": {
+      "welcomeBack": "Welcome back! How can I help you today? 👋",
+      "businessHoursOnline": "Online now",
+      "businessHoursOffline": "Offline - Reply within 24h",
+      "languageChanged": "Language changed to",
+      "errorGeneric": "Sorry, something went wrong. Please try again later.",
+      "errorNoResponse": "Sorry, I could not understand that.",
+      "errorConnection": "❌ Could not connect. Please try again later.",
+      "retryAttempt": "⚠️ Connection issue. Retrying...",
+      "emailSubject": "Contact via Groenvastbouw Chatbot",
+      "whatsappMessage": "Hi! I have a question about passive construction.",
+      "proactiveTriggers": [
+        "Have a question? I'm here to help! 💬",
+        "Wait! Any questions? 🤔",
+        "See something interesting? Ask me! 💡"
+      ],
+      "socialProof": [
+        "💬 John from Utrecht just got a quote",
+        "✅ 15 people used the chatbot this week",
+        "⭐ Average rating: 4.8/5",
+        "🏡 We built 23 passive houses in 2024"
+      ]
+    }
   }
 }
