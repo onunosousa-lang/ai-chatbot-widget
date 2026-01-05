@@ -49,7 +49,56 @@
     businessHours: null, // {start: '09:00', end: '17:00', days: [1,2,3,4,5], timezone: 'Europe/Amsterdam'}
     showRating: true, // Conversation rating widget
     detectReturningUsers: true, // Greet returning visitors
-    pageSpecificTriggers: {} // URL-specific proactive messages
+    pageSpecificTriggers: {}, // URL-specific proactive messages
+    // i18n messages - all user-facing text
+    messages: {
+      nl: {
+        welcomeBack: 'Welkom terug! Hoe kan ik je vandaag helpen? 👋',
+        businessHoursOnline: 'Online now',
+        businessHoursOffline: 'Offline - Reageren binnen 24u',
+        languageChanged: 'Taal gewijzigd naar',
+        errorGeneric: 'Sorry, er ging iets mis. Probeer het later opnieuw.',
+        errorNoResponse: 'Sorry, ik kon dat niet begrijpen.',
+        errorConnection: '❌ Kan geen verbinding maken. Probeer het later opnieuw.',
+        retryAttempt: '⚠️ Verbinding probleem. Nieuwe poging...',
+        emailSubject: 'Contacto via Chatbot',
+        whatsappMessage: 'Olá! Tenho uma pergunta sobre duurzaam bouwen.',
+        proactiveTriggers: [
+          'Heb je een vraag? Ik help je graag! 💬',
+          'Wacht! Heb je nog vragen? 🤔',
+          'Zie je iets interessants? Vraag het me! 💡'
+        ],
+        socialProof: [
+          '💬 Jan uit Utrecht kreeg net een offerte',
+          '✅ 15 mensen gebruikten deze week de chatbot',
+          '⭐ Gemiddelde beoordeling: 4.8/5',
+          '🏡 Wij bouwden 23 passieve huizen in 2024'
+        ]
+      },
+      en: {
+        welcomeBack: 'Welcome back! How can I help you today? 👋',
+        businessHoursOnline: 'Online now',
+        businessHoursOffline: 'Offline - Reply within 24h',
+        languageChanged: 'Language changed to',
+        errorGeneric: 'Sorry, something went wrong. Please try again later.',
+        errorNoResponse: 'Sorry, I could not understand that.',
+        errorConnection: '❌ Could not connect. Please try again later.',
+        retryAttempt: '⚠️ Connection issue. Retrying...',
+        emailSubject: 'Contact via Chatbot',
+        whatsappMessage: 'Hi! I have a question about sustainable construction.',
+        proactiveTriggers: [
+          'Have a question? I\'m here to help! 💬',
+          'Wait! Any questions? 🤔',
+          'See something interesting? Ask me! 💡'
+        ],
+        socialProof: [
+          '💬 John from Utrecht just got a quote',
+          '✅ 15 people used the chatbot this week',
+          '⭐ Average rating: 4.8/5',
+          '🏡 We built 23 passive houses in 2024'
+        ]
+      }
+    }
   };
 
   // Thread ID storage for conversation continuity
@@ -97,6 +146,19 @@
       console.log('📊 Analytics:', eventName, data);
     }
   };
+
+  // Helper function to get localized messages
+  function getMessage(key, lang = null) {
+    const language = lang || currentLanguage || config.defaultLanguage;
+    if (config.messages && config.messages[language] && config.messages[language][key]) {
+      return config.messages[language][key];
+    }
+    // Fallback to default language
+    if (config.messages && config.messages[config.defaultLanguage] && config.messages[config.defaultLanguage][key]) {
+      return config.messages[config.defaultLanguage][key];
+    }
+    return '';
+  }
 
   // Get script tag and read data attributes
   const scriptTag = document.currentScript;
@@ -741,7 +803,8 @@
     });
 
     emailBtn?.addEventListener('click', () => {
-      const emailLink = `mailto:${config.emailAddress}?subject=Contacto via Chatbot`;
+      const subject = getMessage('emailSubject');
+      const emailLink = `mailto:${config.emailAddress}?subject=${encodeURIComponent(subject)}`;
       const a = document.createElement('a');
       a.href = emailLink;
       a.target = '_self';
@@ -750,7 +813,8 @@
 
     whatsappBtn?.addEventListener('click', () => {
       const phoneNumber = config.whatsappNumber.replace(/[^0-9]/g, '');
-      const whatsappLink = `https://wa.me/${phoneNumber}?text=Olá! Tenho uma pergunta sobre duurzaam bouwen.`;
+      const message = getMessage('whatsappMessage');
+      const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
       const a = document.createElement('a');
       a.href = whatsappLink;
       a.target = '_blank';
@@ -835,7 +899,7 @@
         currentThreadId = data.threadId;
       }
 
-      const botResponse = data.response || data.message || 'Sorry, I could not understand that.';
+      const botResponse = data.response || data.message || getMessage('errorNoResponse');
 
       // Store in chat history
       chatHistory.push({ role: 'assistant', content: botResponse });
@@ -844,7 +908,7 @@
     })
     .catch(err => {
       hideTyping();
-      addMessage('Sorry, something went wrong. Please try again later.', 'bot');
+      addMessage(getMessage('errorGeneric'), 'bot');
       console.error('Chatbot API error:', err);
     });
   }
@@ -950,9 +1014,7 @@
 
     // Add system message
     const langNames = { 'nl': 'Nederlands', 'en': 'English' };
-    const msg = lang === 'nl'
-      ? `Taal gewijzigd naar ${langNames[lang]}`
-      : `Language changed to ${langNames[lang]}`;
+    const msg = `${getMessage('languageChanged', lang)} ${langNames[lang]}`;
 
     addMessage(msg, 'bot');
   }
@@ -960,23 +1022,20 @@
   // Setup proactive chat triggers
   function setupProactiveTriggers() {
     let triggered = false;
+    const triggers = getMessage('proactiveTriggers') || [];
 
     // Trigger after 30 seconds on page
     setTimeout(() => {
-      if (!triggered && !document.getElementById('chatbot-window')?.classList.contains('open')) {
-        showProactiveMessage(config.defaultLanguage === 'nl'
-          ? "Heb je een vraag? Ik help je graag! 💬"
-          : "Have a question? I'm here to help! 💬");
+      if (!triggered && !document.getElementById('chatbot-window')?.classList.contains('open') && triggers[0]) {
+        showProactiveMessage(triggers[0]);
         triggered = true;
       }
     }, 30000);
 
     // Exit intent (mouse leaving viewport)
     document.addEventListener('mouseleave', (e) => {
-      if (!triggered && e.clientY < 10 && !document.getElementById('chatbot-window')?.classList.contains('open')) {
-        showProactiveMessage(config.defaultLanguage === 'nl'
-          ? "Wacht! Heb je nog vragen? 🤔"
-          : "Wait! Any questions? 🤔");
+      if (!triggered && e.clientY < 10 && !document.getElementById('chatbot-window')?.classList.contains('open') && triggers[1]) {
+        showProactiveMessage(triggers[1]);
         triggered = true;
       }
     });
@@ -985,10 +1044,8 @@
     let scrollTriggered = false;
     window.addEventListener('scroll', () => {
       const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-      if (!scrollTriggered && scrollPercent > 50 && !document.getElementById('chatbot-window')?.classList.contains('open')) {
-        showProactiveMessage(config.defaultLanguage === 'nl'
-          ? "Zie je iets interessants? Vraag het me! 💡"
-          : "See something interesting? Ask me! 💡");
+      if (!scrollTriggered && scrollPercent > 50 && !document.getElementById('chatbot-window')?.classList.contains('open') && triggers[2]) {
+        showProactiveMessage(triggers[2]);
         scrollTriggered = true;
       }
     });
@@ -1020,17 +1077,8 @@
 
   // Setup social proof notifications
   function setupSocialProof() {
-    const messages = config.defaultLanguage === 'nl' ? [
-      "💬 Jan uit Utrecht kreeg net een offerte",
-      "✅ 15 mensen gebruikten deze week de chatbot",
-      "⭐ Gemiddelde beoordeling: 4.8/5",
-      "🏡 Wij bouwden 23 passieve huizen in 2024"
-    ] : [
-      "💬 John from Utrecht just got a quote",
-      "✅ 15 people used the chatbot this week",
-      "⭐ Average rating: 4.8/5",
-      "🏡 We built 23 passive houses in 2024"
-    ];
+    const messages = getMessage('socialProof') || [];
+    if (messages.length === 0) return;
 
     let currentIndex = 0;
 
@@ -1156,13 +1204,11 @@
       // Show personalized welcome if no active session
       if (!currentThreadId && visitCount > 1) {
         setTimeout(() => {
-          const msg = config.defaultLanguage === 'nl'
-            ? `Welkom terug! Hoe kan ik je vandaag helpen? 👋`
-            : `Welcome back! How can I help you today? 👋`;
+          const msg = getMessage('welcomeBack');
 
           // Update welcome message
           const welcomeMsg = document.querySelector('.chatbot-message.bot .chatbot-message-content');
-          if (welcomeMsg) {
+          if (welcomeMsg && msg) {
             welcomeMsg.textContent = msg;
           }
         }, 500);
@@ -1207,13 +1253,10 @@
     if (!statusText) return;
 
     if (isWithinBusinessHours()) {
-      statusText.textContent = 'Online now';
+      statusText.textContent = getMessage('businessHoursOnline');
       statusText.style.color = '#4CAF50';
     } else {
-      const msg = config.defaultLanguage === 'nl'
-        ? 'Offline - Reageren binnen 24u'
-        : 'Offline - Reply within 24h';
-      statusText.textContent = msg;
+      statusText.textContent = getMessage('businessHoursOffline');
       statusText.style.color = '#FF9800';
     }
   }
@@ -1348,7 +1391,7 @@
           currentThreadId = data.threadId;
         }
 
-        const botResponse = data.response || data.message || 'Sorry, I could not understand that.';
+        const botResponse = data.response || data.message || getMessage('errorNoResponse');
 
         // Store in chat history
         chatHistory.push({ role: 'assistant', content: botResponse });
@@ -1367,9 +1410,7 @@
 
         if (attempt < retries) {
           // Show retry message
-          const retryMsg = config.defaultLanguage === 'nl'
-            ? `⚠️ Verbinding probleem. Nieuwe poging... (${attempt}/${retries})`
-            : `⚠️ Connection issue. Retrying... (${attempt}/${retries})`;
+          const retryMsg = `${getMessage('retryAttempt')} (${attempt}/${retries})`;
 
           // Update typing indicator with retry message
           const typingDiv = document.getElementById('chatbot-typing');
@@ -1382,11 +1423,7 @@
         } else {
           // All retries failed
           hideTyping();
-          const errorMsg = config.defaultLanguage === 'nl'
-            ? '❌ Kan geen verbinding maken. Probeer het later opnieuw.'
-            : '❌ Could not connect. Please try again later.';
-
-          addMessage(errorMsg, 'bot');
+          addMessage(getMessage('errorConnection'), 'bot');
 
           analytics.track('message_failed', {
             error: err.message,

@@ -4,7 +4,7 @@
   "primaryColor": "#2ee8c2",
   "secondaryColor": "#1661a0",
   "companyName": "ChatMate Demo",
-  "welcomeMessage": "...",
+  "welcomeMessage": "Welcome! How can I help you today?",
   "placeholder": "Type your message...",
   "position": "bottom-right",
   "logo": null,
@@ -16,7 +16,11 @@
   "chatHeight": "450px",
   "chatWidth": "380px",
   "zIndex": 9999,
-  "conversationStarters": [],
+  "conversationStarters": [
+    "Get a price indication",
+    "View our projects",
+    "Contact us"
+  ],
   "showLanguageSelector": true,
   "languages": ["nl", "en", "fr", "pt"],
   "defaultLanguage": "nl",
@@ -35,5 +39,43 @@
     "days": [1, 2, 3, 4, 5],
     "timezone": "Europe/Amsterdam"
   },
-  "pageSpecificTriggers": {}
+  "pageSpecificTriggers": {},
+  "messages": {
+    "nl": {
+      "welcomeBack": "Welkom terug! Hoe kan ik je vandaag helpen? 👋",
+      "businessHoursOnline": "Online nu",
+      "businessHoursOffline": "Offline - Reageren binnen 24u",
+      "languageChanged": "Taal gewijzigd naar",
+      "errorGeneric": "Sorry, er ging iets mis. Probeer het later opnieuw.",
+      "errorNoResponse": "Sorry, ik kon dat niet begrijpen.",
+      "errorConnection": "❌ Kan geen verbinding maken. Probeer het later opnieuw.",
+      "retryAttempt": "⚠️ Verbinding probleem. Nieuwe poging...",
+      "emailSubject": "Contact via ChatMate",
+      "whatsappMessage": "Hallo! Ik heb een vraag.",
+      "proactiveTriggers": [
+        "Heb je een vraag? Ik help je graag! 💬",
+        "Wacht! Heb je nog vragen? 🤔",
+        "Zie je iets interessants? Vraag het me! 💡"
+      ],
+      "socialProof": []
+    },
+    "en": {
+      "welcomeBack": "Welcome back! How can I help you today? 👋",
+      "businessHoursOnline": "Online now",
+      "businessHoursOffline": "Offline - Reply within 24h",
+      "languageChanged": "Language changed to",
+      "errorGeneric": "Sorry, something went wrong. Please try again later.",
+      "errorNoResponse": "Sorry, I could not understand that.",
+      "errorConnection": "❌ Could not connect. Please try again later.",
+      "retryAttempt": "⚠️ Connection issue. Retrying...",
+      "emailSubject": "Contact via ChatMate",
+      "whatsappMessage": "Hi! I have a question.",
+      "proactiveTriggers": [
+        "Have a question? I'm here to help! 💬",
+        "Wait! Any questions? 🤔",
+        "See something interesting? Ask me! 💡"
+      ],
+      "socialProof": []
+    }
+  }
 }
