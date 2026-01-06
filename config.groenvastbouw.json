@@ -1,10 +1,11 @@
 {
   "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
   "clientId": "groenvastbouw",
-  "primaryColor": "#00D084",
-  "secondaryColor": "#00A86B",
-  "companyName": "Groenvast Bouw",
-  "welcomeMessage": "Welkom bij Groenvastbouw! Hoe kan ik je helpen?",
+  "primaryColor": "#90dc35",
+  "secondaryColor": "#6fb820",
+  "headerColor": "#2A3439",
+  "companyName": "Groenvastbouw",
+  "welcomeMessage": "Welkom terug! Hoe kan ik je vandaag helpen?",
   "placeholder": "Type je bericht...",
   "position": "bottom-right",
   "logo": "https://groenvastbouw.nl/wp-content/uploads/2023/01/groenvast-logo.png",
@@ -17,9 +18,8 @@
   "chatWidth": "380px",
   "zIndex": 9999,
   "conversationStarters": [
-    "Prijsindicatie voor mijn project",
-    "Referentieprojecten bekijken",
-    "Contact opnemen"
+    "Plan een gesprek",
+    "Stel een vraag"
   ],
   "showLanguageSelector": true,
   "languages": ["nl", "en"],

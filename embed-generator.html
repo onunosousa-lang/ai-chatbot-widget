@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatMate - Embed Code Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 800px;
+      width: 100%;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .code-box {
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .code-box pre {
+      margin: 0;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #333;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .copy-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #5568d3;
+    }
+
+    .copy-btn.copied {
+      background: #10b981;
+    }
+
+    .instructions {
+      background: #f0f9ff;
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+
+    .instructions h3 {
+      color: #1e40af;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      color: #334155;
+      line-height: 1.8;
+    }
+
+    .instructions li {
+      margin-bottom: 8px;
+    }
+
+    .platform-specific {
+      display: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #cbd5e1;
+    }
+
+    .platform-specific.active {
+      display: block;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #10b981;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🤖 ChatMate Embed Generator</h1>
+    <p class="subtitle">Generate your custom chatbot code in seconds</p>
+
+    <div class="form-group">
+      <label for="client">Select Your Configuration:</label>
+      <select id="client" onchange="generateCode()">
+        <option value="groenvastbouw">Groenvast Bouw</option>
+        <option value="demo">ChatMate Demo</option>
+        <option value="custom">Custom Configuration</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="customConfigGroup" style="display: none;">
+      <label for="customConfig">Custom Config URL:</label>
+      <input type="text" id="customConfig" placeholder="https://your-domain.com/config.json" onchange="generateCode()">
+    </div>
+
+    <div class="form-group">
+      <label for="platform">Your Website Platform:</label>
+      <select id="platform" onchange="updateInstructions()">
+        <option value="wordpress">WordPress</option>
+        <option value="wix">Wix</option>
+        <option value="squarespace">Squarespace</option>
+        <option value="shopify">Shopify</option>
+        <option value="webflow">Webflow</option>
+        <option value="weebly">Weebly</option>
+        <option value="other">Other / Custom HTML</option>
+      </select>
+    </div>
+
+    <div class="code-box">
+      <pre id="embedCode"></pre>
+      <button class="copy-btn" onclick="copyCode()">📋 Copy Code to Clipboard</button>
+    </div>
+
+    <div class="instructions">
+      <h3>📝 Installation Instructions for <span id="platformName">WordPress</span> <span class="badge">EASY</span></h3>
+
+      <div id="wordpress-instructions" class="platform-specific active">
+        <ol>
+          <li>Log in to your WordPress admin dashboard</li>
+          <li>Go to <strong>Appearance → Customize</strong></li>
+          <li>Look for <strong>Additional CSS</strong> or install the plugin <strong>"Insert Headers and Footers"</strong></li>
+          <li>Paste the code above in the <strong>Footer Scripts</strong> section</li>
+          <li>Click <strong>Publish</strong></li>
+          <li>Visit your website - the chatbot should appear in the bottom-right corner!</li>
+        </ol>
+      </div>
+
+      <div id="wix-instructions" class="platform-specific">
+        <ol>
+          <li>Open your Wix editor</li>
+          <li>Click the <strong>(+)</strong> button on the left sidebar</li>
+          <li>Select <strong>Embed → Embed a Widget</strong></li>
+          <li>Choose <strong>Custom Code</strong></li>
+          <li>Paste the code above</li>
+          <li>Click <strong>Update</strong> and then <strong>Publish</strong></li>
+          <li>The chatbot will appear automatically on all pages!</li>
+        </ol>
+      </div>
+
+      <div id="squarespace-instructions" class="platform-specific">
+        <ol>
+          <li>Go to your Squarespace dashboard</li>
+          <li>Navigate to <strong>Settings → Advanced → Code Injection</strong></li>
+          <li>Paste the code in the <strong>Footer</strong> section</li>
+          <li>Click <strong>Save</strong></li>
+          <li>The chatbot will appear on all pages of your website!</li>
+        </ol>
+      </div>
+
+      <div id="shopify-instructions" class="platform-specific">
+        <ol>
+          <li>Go to <strong>Online Store → Themes</strong></li>
+          <li>Click <strong>Actions → Edit Code</strong></li>
+          <li>Find and open the <strong>theme.liquid</strong> file</li>
+          <li>Scroll to the bottom and paste the code just before <code>&lt;/body&gt;</code></li>
+          <li>Click <strong>Save</strong></li>
+          <li>Visit your store - the chatbot should be live!</li>
+        </ol>
+      </div>
+
+      <div id="webflow-instructions" class="platform-specific">
+        <ol>
+          <li>Open your Webflow project</li>
+          <li>Click the settings icon (⚙️) at the top</li>
+          <li>Go to the <strong>Custom Code</strong> tab</li>
+          <li>Paste the code in <strong>Footer Code</strong> (Before &lt;/body&gt; tag)</li>
+          <li>Click <strong>Save</strong> and <strong>Publish</strong></li>
+          <li>Your chatbot is now live on all pages!</li>
+        </ol>
+      </div>
+
+      <div id="weebly-instructions" class="platform-specific">
+        <ol>
+          <li>Open your Weebly editor</li>
+          <li>Drag an <strong>Embed Code</strong> element onto your page footer</li>
+          <li>Click <strong>Edit Custom HTML</strong></li>
+          <li>Paste the code above</li>
+          <li>Click <strong>Publish</strong></li>
+          <li>The chatbot will appear on all pages!</li>
+        </ol>
+      </div>
+
+      <div id="other-instructions" class="platform-specific">
+        <ol>
+          <li>Find your platform's custom HTML or code injection feature</li>
+          <li>Look for options like: "Custom HTML", "Embed Code", "Footer Scripts", or "Code Injection"</li>
+          <li>Paste the code in the <strong>Footer</strong> or <strong>Before &lt;/body&gt;</strong> section</li>
+          <li>Save and publish your changes</li>
+          <li>If you can't find this option, search "[Your Platform] add custom HTML" on Google</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function generateCode() {
+      const client = document.getElementById('client').value;
+      const customConfigGroup = document.getElementById('customConfigGroup');
+      const customConfig = document.getElementById('customConfig').value;
+
+      if (client === 'custom') {
+        customConfigGroup.style.display = 'block';
+        if (!customConfig) {
+          document.getElementById('embedCode').textContent = 'Please enter your custom config URL above...';
+          return;
+        }
+      } else {
+        customConfigGroup.style.display = 'none';
+      }
+
+      const configUrl = client === 'custom'
+        ? customConfig
+        : `https://ai-chatbot-widget-eight.vercel.app/config.${client}.json`;
+
+      const code = `<script src="https://ai-chatbot-widget-eight.vercel.app/chatbot.js"
+        data-config="${configUrl}">
+<\/script>`;
+
+      document.getElementById('embedCode').textContent = code;
+    }
+
+    function updateInstructions() {
+      const platform = document.getElementById('platform').value;
+      const platformName = document.getElementById('platform').selectedOptions[0].text;
+
+      // Hide all instructions
+      document.querySelectorAll('.platform-specific').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      // Show selected platform instructions
+      document.getElementById(`${platform}-instructions`).classList.add('active');
+      document.getElementById('platformName').textContent = platformName;
+    }
+
+    function copyCode() {
+      const code = document.getElementById('embedCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = '✅ Copied to Clipboard!';
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+          btn.textContent = '📋 Copy Code to Clipboard';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Initialize
+    generateCode();
+  </script>
+</body>
+</html>
