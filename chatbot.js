@@ -302,7 +302,7 @@
       }
 
       .chatbot-header {
-        background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
+        background: ${config.headerColor || `linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%)`};
         color: white;
         padding: 16px;
         display: flex;

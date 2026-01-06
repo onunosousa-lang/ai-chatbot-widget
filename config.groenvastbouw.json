@@ -3,6 +3,7 @@
   "clientId": "groenvastbouw",
   "primaryColor": "#90dc35",
   "secondaryColor": "#6fb820",
+  "headerColor": "#2A3439",
   "companyName": "Groenvastbouw",
   "welcomeMessage": "Welkom terug! Hoe kan ik je vandaag helpen?",
   "placeholder": "Type je bericht...",
