@@ -33,12 +33,7 @@
   "enableTypingDelay": true,
   "showRating": true,
   "detectReturningUsers": true,
-  "businessHours": {
-    "start": "09:00",
-    "end": "17:00",
-    "days": [1, 2, 3, 4, 5],
-    "timezone": "Europe/Amsterdam"
-  },
+  "businessHours": null,
   "pageSpecificTriggers": {
     "/pricing": "Vragen over prijzen? Ik help je graag! 💰",
     "/portfolio": "Zie je een project dat je aanspreekt? 🏡",
