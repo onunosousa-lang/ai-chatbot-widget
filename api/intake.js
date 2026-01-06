@@ -1,7 +1,17 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@chatmate.nl';
+
+// Create transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: GMAIL_USER,
+    pass: GMAIL_APP_PASSWORD
+  }
+});
 
 // Simple in-memory rate limiting (resets on function cold start)
 const rateLimitMap = new Map();
@@ -215,8 +225,8 @@ function generateInternalConfig(clientId) {
 
 async function sendAdminEmail(clientId, publicConfig, internalConfig, companyName) {
   try {
-    await resend.emails.send({
-      from: 'ChatMate Onboarding <onboarding@chatmate.nl>',
+    await transporter.sendMail({
+      from: `"ChatMate Onboarding" <${GMAIL_USER}>`,
       to: ADMIN_EMAIL,
       subject: `New Client Intake: ${companyName}`,
       html: `
@@ -254,8 +264,8 @@ async function sendAdminEmail(clientId, publicConfig, internalConfig, companyNam
 
 async function sendClientEmail(clientEmail, companyName) {
   try {
-    await resend.emails.send({
-      from: 'ChatMate <hello@chatmate.nl>',
+    await transporter.sendMail({
+      from: `"ChatMate" <${GMAIL_USER}>`,
       to: clientEmail,
       subject: 'ChatMate Onboarding Received',
       html: `

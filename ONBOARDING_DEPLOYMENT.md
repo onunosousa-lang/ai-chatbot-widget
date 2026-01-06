@@ -8,14 +8,14 @@ The client onboarding system allows new clients to submit their information thro
 
 - **Frontend**: `onboarding.html` - Static HTML form with vanilla JavaScript
 - **Backend**: `api/intake.js` - Vercel serverless function
-- **Email**: Resend API for sending notifications
+- **Email**: Gmail SMTP via Nodemailer (FREE)
 
 ## Files Created
 
 ```
 /onboarding.html              # Client-facing intake form
 /api/intake.js                # Serverless function for processing submissions
-/package.json                 # Updated with Resend dependency
+/package.json                 # Updated with Nodemailer dependency
 ```
 
 ## Environment Variables Required
@@ -25,20 +25,29 @@ Add these to your Vercel project settings:
 ### Required Variables
 
 ```bash
-RESEND_API_KEY=re_xxxxxxxxxxxxx
+GMAIL_USER=your-email@gmail.com
+GMAIL_APP_PASSWORD=your-16-char-app-password
 ADMIN_EMAIL=your-admin@email.com
 ```
 
 ### How to Get These Values
 
-1. **RESEND_API_KEY**
-   - Sign up at https://resend.com
-   - Navigate to API Keys section
-   - Create a new API key
-   - Copy the key (starts with `re_`)
+1. **GMAIL_USER**
+   - Your Gmail address (e.g., `your-business@gmail.com`)
+   - This will be used as the sender email
 
-2. **ADMIN_EMAIL**
+2. **GMAIL_APP_PASSWORD**
+   - Go to https://myaccount.google.com/security
+   - Enable 2-Factor Authentication (required)
+   - Go to https://myaccount.google.com/apppasswords
+   - Select "Mail" and "Other (Custom name)"
+   - Enter "ChatMate Vercel" as the name
+   - Copy the 16-character password (no spaces)
+   - IMPORTANT: This is NOT your regular Gmail password
+
+3. **ADMIN_EMAIL**
    - Email address where new client intake notifications will be sent
+   - Can be the same as GMAIL_USER or different
    - Example: `admin@chatmate.nl`
 
 ## Deployment Steps
@@ -49,34 +58,49 @@ ADMIN_EMAIL=your-admin@email.com
 npm install
 ```
 
-### 2. Configure Resend
+### 2. Configure Gmail App Password
 
-#### Domain Verification (Production)
+#### Generate App Password
 
-For production use, verify your domain in Resend:
+1. Enable 2-Step Verification on your Google Account:
+   - Go to https://myaccount.google.com/security
+   - Click "2-Step Verification" and follow setup
 
-1. Go to https://resend.com/domains
-2. Add your domain (e.g., `chatmate.nl`)
-3. Add the DNS records provided by Resend
-4. Wait for verification (usually 5-10 minutes)
+2. Generate App Password:
+   - Go to https://myaccount.google.com/apppasswords
+   - Select "Mail" for app type
+   - Select "Other (Custom name)" for device
+   - Enter "ChatMate Vercel"
+   - Click Generate
+   - Copy the 16-character password (format: xxxx xxxx xxxx xxxx)
+   - Remove spaces when adding to environment variables
 
-#### Using Sandbox (Testing)
+#### Important Notes
 
-For testing, Resend provides a sandbox that can send to verified email addresses:
-
-1. In Resend dashboard, verify the email addresses you want to test with
-2. Use the sandbox domain for testing
+- Do NOT use your regular Gmail password
+- App passwords only work with 2FA enabled
+- Keep the app password secure
+- You can revoke/regenerate anytime from the same page
+- Gmail allows 500 emails/day (plenty for onboarding forms)
 
 ### 3. Set Environment Variables in Vercel
 
 ```bash
 # Via Vercel CLI
-vercel env add RESEND_API_KEY
+vercel env add GMAIL_USER
+vercel env add GMAIL_APP_PASSWORD
 vercel env add ADMIN_EMAIL
 
 # Or via Vercel Dashboard
 # Go to Project Settings > Environment Variables
-# Add both variables for Production, Preview, and Development
+# Add all three variables for Production, Preview, and Development
+```
+
+Example values:
+```
+GMAIL_USER=chatmate.business@gmail.com
+GMAIL_APP_PASSWORD=abcdabcdabcdabcd
+ADMIN_EMAIL=admin@chatmate.nl
 ```
 
 ### 4. Deploy to Vercel
@@ -210,16 +234,16 @@ Edit email templates in `/api/intake.js`:
 
 ```javascript
 // Admin email template
-await resend.emails.send({
-  from: 'ChatMate Onboarding <onboarding@chatmate.nl>',
+await transporter.sendMail({
+  from: `"ChatMate Onboarding" <${GMAIL_USER}>`,
   to: ADMIN_EMAIL,
   subject: `New Client Intake: ${companyName}`,
   html: `...` // Customize HTML here
 });
 
 // Client confirmation email template
-await resend.emails.send({
-  from: 'ChatMate <hello@chatmate.nl>',
+await transporter.sendMail({
+  from: `"ChatMate" <${GMAIL_USER}>`,
   to: clientEmail,
   subject: 'ChatMate Onboarding Received',
   html: `...` // Customize HTML here
@@ -266,21 +290,26 @@ vercel dev
 
 1. Set up environment variables in `.env`:
    ```
-   RESEND_API_KEY=your_test_key
+   GMAIL_USER=your-email@gmail.com
+   GMAIL_APP_PASSWORD=your-16-char-password
    ADMIN_EMAIL=your_test_email@example.com
    ```
 
 2. Submit test form
 3. Check both admin and client emails
+4. Check Gmail "Sent" folder to verify emails were sent
 
 ## Troubleshooting
 
 ### Emails Not Sending
 
-1. Check RESEND_API_KEY is set correctly
-2. Verify domain in Resend dashboard (production)
-3. Check Resend logs at https://resend.com/emails
-4. Ensure sender email domain matches verified domain
+1. Verify 2-Factor Authentication is enabled on Gmail
+2. Check GMAIL_APP_PASSWORD is correct (16 chars, no spaces)
+3. Verify GMAIL_USER is correct
+4. Check Gmail account hasn't hit daily limit (500 emails/day)
+5. Look for "Less secure app" blocks (shouldn't happen with app passwords)
+6. Check Vercel function logs for error details
+7. Test with a simple email first to verify credentials
 
 ### Form Submission Fails
 
