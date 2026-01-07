@@ -520,18 +520,20 @@
       .chatbot-starter-btn {
         padding: 8px 12px;
         border: 1px solid ${config.primaryColor};
-        background: white;
-        color: ${config.primaryColor};
+        background: ${config.primaryColor};
+        color: ${config.secondaryColor};
         border-radius: 16px;
         cursor: pointer;
         font-size: 13px;
+        font-weight: 500;
         transition: all 0.2s;
         flex: 0 0 auto;
       }
 
       .chatbot-starter-btn:hover {
-        background: ${config.primaryColor};
-        color: white;
+        background: ${config.secondaryColor};
+        color: ${config.primaryColor};
+        border-color: ${config.secondaryColor};
       }
 
       /* Quick Reply Buttons */
@@ -544,18 +546,20 @@
 
       .chatbot-quick-reply {
         padding: 6px 12px;
-        background: white;
+        background: ${config.primaryColor};
         border: 1px solid ${config.primaryColor};
-        color: ${config.primaryColor};
+        color: ${config.secondaryColor};
         border-radius: 12px;
         cursor: pointer;
         font-size: 12px;
+        font-weight: 500;
         transition: all 0.2s;
       }
 
       .chatbot-quick-reply:hover {
-        background: ${config.primaryColor};
-        color: white;
+        background: ${config.secondaryColor};
+        color: ${config.primaryColor};
+        border-color: ${config.secondaryColor};
       }
 
       /* Language Selector */
