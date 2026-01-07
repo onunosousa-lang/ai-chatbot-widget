@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Onboarding - Standalone (No Backend Required)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input,
+        .radio-item input {
+            width: auto;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 30px;
+        }
+
+        .success-screen.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .success-screen h2 {
+            font-size: 28px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .success-screen p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .client-id-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .honeypot {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Client Onboarding - Standalone</h1>
+            <p>Complete the form below to generate your chatbot configuration JSON (no backend required)</p>
+        </div>
+
+        <div class="form-container">
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="intakeForm">
+                <!-- Honeypot -->
+                <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off">
+
+                <!-- Company Basics -->
+                <div class="section">
+                    <h2 class="section-title">Company Basics</h2>
+
+                    <div class="form-group">
+                        <label class="required">Company Name</label>
+                        <input type="text" name="company_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Website URL</label>
+                        <input type="url" name="website_url" required placeholder="https://example.com">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required">Industry</label>
+                            <select name="industry" required>
+                                <option value="">Select industry</option>
+                                <option value="construction">Construction</option>
+                                <option value="renovation">Renovation</option>
+                                <option value="real_estate">Real Estate</option>
+                                <option value="legal">Legal</option>
+                                <option value="consulting">Consulting</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="finance">Finance</option>
+                                <option value="retail">Retail</option>
+                                <option value="hospitality">Hospitality</option>
+                                <option value="education">Education</option>
+                                <option value="technology">Technology</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Country</label>
+                            <select name="country" required>
+                                <option value="">Select country</option>
+                                <option value="NL">Netherlands</option>
+                                <option value="BE">Belgium</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="ES">Spain</option>
+                                <option value="PT">Portugal</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="US">United States</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Service Area</label>
+                        <textarea name="service_area" required placeholder="Amsterdam, Rotterdam, Utrecht (one per line or comma-separated)"></textarea>
+                        <div class="help-text">Enter cities/regions you serve, separated by commas or new lines</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Supported Languages</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="languages" value="nl" id="lang_nl">
+                                <label for="lang_nl">Dutch (NL)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="languages" value="en" id="lang_en">
+                                <label for="lang_en">English (EN)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="languages" value="de" id="lang_de">
+                                <label for="lang_de">German (DE)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="languages" value="fr" id="lang_fr">
+                                <label for="lang_fr">French (FR)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="languages" value="es" id="lang_es">
+                                <label for="lang_es">Spanish (ES)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" name="languages" value="pt" id="lang_pt">
+                                <label for="lang_pt">Portuguese (PT)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Website Default Language</label>
+                        <select name="website_default_language" required>
+                            <option value="">Select default language</option>
+                            <option value="nl">Dutch (NL)</option>
+                            <option value="en">English (EN)</option>
+                            <option value="de">German (DE)</option>
+                            <option value="fr">French (FR)</option>
+                            <option value="es">Spanish (ES)</option>
+                            <option value="pt">Portuguese (PT)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Offer -->
+                <div class="section">
+                    <h2 class="section-title">Your Offer</h2>
+
+                    <div class="form-group">
+                        <label class="required">One-Liner Offer</label>
+                        <input type="text" name="one_liner_offer" required placeholder="E.g., Sustainable construction solutions for modern homes">
+                        <div class="help-text">Brief description of what you offer</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Top Service #1</label>
+                        <input type="text" name="top_service_1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Top Service #2</label>
+                        <input type="text" name="top_service_2" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Top Service #3</label>
+                        <input type="text" name="top_service_3" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Customer Type</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="customer_type" value="b2c" id="ct_b2c" required>
+                                <label for="ct_b2c">B2C (Consumers)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="customer_type" value="b2b" id="ct_b2b">
+                                <label for="ct_b2b">B2B (Business)</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="customer_type" value="both" id="ct_both">
+                                <label for="ct_both">Both</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Typical Budget Range</label>
+                            <input type="text" name="typical_budget_range" placeholder="E.g., €5,000 - €50,000">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Typical Timeline</label>
+                            <input type="text" name="typical_timeline" placeholder="E.g., 2-6 months">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">What You DON'T Offer</label>
+                        <textarea name="not_offered" required placeholder="Emergency repairs&#10;Interior decoration&#10;Furniture installation"></textarea>
+                        <div class="help-text">List services you don't provide (one per line)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Key Differentiator</label>
+                        <input type="text" name="key_differentiator" placeholder="E.g., 20+ years experience, eco-certified materials">
+                    </div>
+                </div>
+
+                <!-- Lead Handling -->
+                <div class="section">
+                    <h2 class="section-title">Lead Handling</h2>
+
+                    <div class="form-group">
+                        <label class="required">Lead Notification Email</label>
+                        <input type="email" name="lead_notification_email" required>
+                        <div class="help-text">Where should lead notifications be sent?</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lead Notification Phone</label>
+                        <input type="tel" name="lead_notification_phone" placeholder="+31 6 12345678">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Hours</label>
+                        <input type="text" name="contact_hours" placeholder="Mon-Fri 9:00-17:00">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Privacy Policy URL</label>
+                        <input type="url" name="privacy_policy_url" required placeholder="https://example.com/privacy">
+                    </div>
+                </div>
+
+                <!-- Behavior -->
+                <div class="section">
+                    <h2 class="section-title">Chatbot Behavior</h2>
+
+                    <div class="form-group">
+                        <label class="required">Allow Price Range Indications?</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="allow_price_ranges" value="yes" id="price_yes" required>
+                                <label for="price_yes">Yes</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="allow_price_ranges" value="no" id="price_no">
+                                <label for="price_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="pricing_text_group" style="display: none;">
+                        <label>Indicative Pricing Text</label>
+                        <textarea name="indicative_pricing_text" placeholder="Our projects typically range from €X to €Y depending on scope and materials"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Enable Calendly Integration?</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="calendly_enabled" value="yes" id="cal_yes" required>
+                                <label for="cal_yes">Yes</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="calendly_enabled" value="no" id="cal_no">
+                                <label for="cal_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="calendly_url_group" style="display: none;">
+                        <label class="required">Calendly URL</label>
+                        <input type="url" name="calendly_url" placeholder="https://calendly.com/your-username">
+                    </div>
+                </div>
+
+                <!-- Branding -->
+                <div class="section">
+                    <h2 class="section-title">Branding</h2>
+
+                    <div class="form-group">
+                        <label>Bot Display Name</label>
+                        <input type="text" name="bot_display_name" placeholder="Leave empty to use company name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Tone of Voice</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="tone" value="professional" id="tone_prof" required>
+                                <label for="tone_prof">Professional</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="tone" value="friendly" id="tone_friend">
+                                <label for="tone_friend">Friendly</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="tone" value="neutral" id="tone_neut">
+                                <label for="tone_neut">Neutral</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Primary Brand Color</label>
+                        <input type="text" name="primary_color_hex" placeholder="#667eea" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
+                        <div class="help-text">Hex color code (e.g., #667eea)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Logo URL</label>
+                        <input type="url" name="logo_url" placeholder="https://example.com/logo.png">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Generate Configuration</button>
+            </form>
+
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon">✅</div>
+                <h2>Configuration Generated!</h2>
+                <p>Your chatbot configuration has been created successfully.</p>
+                <div class="client-id-display">
+                    <strong>Client ID:</strong> <span id="displayClientId"></span>
+                </div>
+                <p>Click the button below to download your configuration JSON file.</p>
+                <a href="#" class="download-btn" id="downloadBtn">Download Configuration</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('intakeForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successScreen = document.getElementById('successScreen');
+        const formContainer = form.parentElement;
+        const displayClientId = document.getElementById('displayClientId');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        let generatedConfig = null;
+
+        // Show/hide conditional fields
+        document.querySelectorAll('input[name="allow_price_ranges"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const pricingGroup = document.getElementById('pricing_text_group');
+                pricingGroup.style.display = e.target.value === 'yes' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="calendly_enabled"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const calendlyGroup = document.getElementById('calendly_url_group');
+                const calendlyInput = document.querySelector('input[name="calendly_url"]');
+                if (e.target.value === 'yes') {
+                    calendlyGroup.style.display = 'block';
+                    calendlyInput.required = true;
+                } else {
+                    calendlyGroup.style.display = 'none';
+                    calendlyInput.required = false;
+                }
+            });
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            errorMessage.classList.remove('active');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            // Validate at least one language selected
+            const languages = Array.from(document.querySelectorAll('input[name="languages"]:checked'));
+            if (languages.length === 0) {
+                showError('Please select at least one supported language');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Configuration';
+                return;
+            }
+
+            // Collect form data
+            const formData = new FormData(form);
+
+            // Check honeypot
+            if (formData.get('website')) {
+                showError('Spam detected');
+                return;
+            }
+
+            const data = {
+                company_name: formData.get('company_name'),
+                website_url: formData.get('website_url'),
+                industry: formData.get('industry'),
+                country: formData.get('country'),
+                service_area: formData.get('service_area'),
+                languages: languages.map(cb => cb.value),
+                website_default_language: formData.get('website_default_language'),
+                one_liner_offer: formData.get('one_liner_offer'),
+                top_service_1: formData.get('top_service_1'),
+                top_service_2: formData.get('top_service_2'),
+                top_service_3: formData.get('top_service_3'),
+                customer_type: formData.get('customer_type'),
+                typical_budget_range: formData.get('typical_budget_range'),
+                typical_timeline: formData.get('typical_timeline'),
+                not_offered: formData.get('not_offered'),
+                key_differentiator: formData.get('key_differentiator'),
+                lead_notification_email: formData.get('lead_notification_email'),
+                lead_notification_phone: formData.get('lead_notification_phone'),
+                contact_hours: formData.get('contact_hours'),
+                privacy_policy_url: formData.get('privacy_policy_url'),
+                allow_price_ranges: formData.get('allow_price_ranges'),
+                indicative_pricing_text: formData.get('indicative_pricing_text'),
+                calendly_enabled: formData.get('calendly_enabled'),
+                calendly_url: formData.get('calendly_url'),
+                bot_display_name: formData.get('bot_display_name'),
+                tone: formData.get('tone'),
+                primary_color_hex: formData.get('primary_color_hex'),
+                logo_url: formData.get('logo_url')
+            };
+
+            try {
+                // Generate client ID locally (no backend needed)
+                const clientId = generateClientId(data.company_name);
+                
+                // Generate configuration JSON locally
+                generatedConfig = {
+                    client_id: clientId,
+                    company_name: data.company_name,
+                    website_url: data.website_url,
+                    industry: data.industry,
+                    country: data.country,
+                    service_area: data.service_area.split(/[,\n]+/).map(s => s.trim()).filter(Boolean),
+                    languages: data.languages,
+                    website_default_language: data.website_default_language,
+                    one_liner_offer: data.one_liner_offer,
+                    services: [
+                        data.top_service_1,
+                        data.top_service_2,
+                        data.top_service_3
+                    ].filter(Boolean),
+                    customer_type: data.customer_type,
+                    typical_budget_range: data.typical_budget_range || null,
+                    typical_timeline: data.typical_timeline || null,
+                    not_offered: data.not_offered.split(/\n+/).map(s => s.trim()).filter(Boolean),
+                    key_differentiator: data.key_differentiator || null,
+                    contact: {
+                        email: data.lead_notification_email,
+                        phone: data.lead_notification_phone || null,
+                        hours: data.contact_hours || null
+                    },
+                    privacy_policy_url: data.privacy_policy_url || null,
+                    pricing: {
+                        allow_ranges: data.allow_price_ranges === 'yes',
+                        indicative_text: data.indicative_pricing_text || null
+                    },
+                    calendly: {
+                        enabled: data.calendly_enabled === 'yes',
+                        url: data.calendly_url || null
+                    },
+                    branding: {
+                        bot_display_name: data.bot_display_name || data.company_name,
+                        tone: data.tone,
+                        primary_color: data.primary_color_hex || '#667eea',
+                        logo_url: data.logo_url || null
+                    },
+                    generated_at: new Date().toISOString()
+                };
+
+                displayClientId.textContent = clientId;
+                form.style.display = 'none';
+                successScreen.classList.add('active');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Configuration';
+
+            } catch (error) {
+                showError(error.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Configuration';
+            }
+        });
+
+        downloadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (generatedConfig) {
+                const blob = new Blob([JSON.stringify(generatedConfig, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${generatedConfig.client_id}_config.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        });
+
+        function generateClientId(companyName) {
+            // Generate a unique client ID based on company name + timestamp
+            const cleanName = companyName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const timestamp = Date.now().toString(36);
+            const random = Math.random().toString(36).substring(2, 7);
+            return `${cleanName}_${timestamp}_${random}`;
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('active');
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+</body>
+</html>
