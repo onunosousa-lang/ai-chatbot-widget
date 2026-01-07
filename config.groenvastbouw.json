@@ -51,6 +51,10 @@
       "retryAttempt": "⚠️ Verbinding probleem. Nieuwe poging...",
       "emailSubject": "Contact via Groenvastbouw Chatbot",
       "whatsappMessage": "Hallo! Ik heb een vraag over passiefbouw.",
+      "conversationStarters": [
+        "Plan een gesprek",
+        "Stel een vraag"
+      ],
       "proactiveTriggers": [
         "Heb je een vraag? Ik help je graag! 💬",
         "Wacht! Heb je nog vragen? 🤔",
@@ -74,6 +78,10 @@
       "retryAttempt": "⚠️ Connection issue. Retrying...",
       "emailSubject": "Contact via Groenvastbouw Chatbot",
       "whatsappMessage": "Hi! I have a question about passive construction.",
+      "conversationStarters": [
+        "Schedule a call",
+        "Ask a question"
+      ],
       "proactiveTriggers": [
         "Have a question? I'm here to help! 💬",
         "Wait! Any questions? 🤔",

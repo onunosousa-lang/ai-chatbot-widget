@@ -726,13 +726,9 @@
             </div>
           </div>
 
-          ${config.conversationStarters && config.conversationStarters.length > 0 ? `
-          <div class="chatbot-starters" id="chatbot-starters">
-            ${config.conversationStarters.map(starter => `
-              <button class="chatbot-starter-btn" onclick="window.chatbotSendStarter('${starter.replace(/'/g, "\\'")}')">${starter}</button>
-            `).join('')}
+          <div class="chatbot-starters" id="chatbot-starters" style="display: none;">
+            <!-- Conversation starters will be rendered dynamically based on language -->
           </div>
-          ` : ''}
 
           ${config.emailButton || config.whatsappButton ? `
           <div class="chatbot-actions">
@@ -836,6 +832,9 @@
 
     // Initialize language
     currentLanguage = config.defaultLanguage;
+
+    // Initialize conversation starters with default language
+    updateConversationStarters();
 
     // Setup proactive triggers
     if (config.proactiveTrigger) {
@@ -1000,6 +999,31 @@
     return html;
   }
 
+  // Update conversation starters based on current language
+  function updateConversationStarters() {
+    const starters = getMessage('conversationStarters') || [];
+    const startersContainer = document.getElementById('chatbot-starters');
+
+    if (!startersContainer || starters.length === 0) return;
+
+    // Clear existing buttons
+    startersContainer.innerHTML = '';
+
+    // Add new buttons based on current language
+    starters.forEach(starter => {
+      const button = document.createElement('button');
+      button.className = 'chatbot-starter-btn';
+      button.textContent = starter;
+      button.onclick = () => {
+        window.chatbotSendStarter(starter);
+      };
+      startersContainer.appendChild(button);
+    });
+
+    // Show the container
+    startersContainer.style.display = 'flex';
+  }
+
   // Switch language
   function switchLanguage(lang) {
     currentLanguage = lang;
@@ -1015,6 +1039,9 @@
         }
       }
     });
+
+    // Update conversation starters with new language
+    updateConversationStarters();
 
     // Add system message
     const langNames = { 'nl': 'Nederlands', 'en': 'English' };
@@ -1148,6 +1175,9 @@
       currentThreadId = session.threadId;
       chatHistory = session.chatHistory || [];
       currentLanguage = session.language || config.defaultLanguage;
+
+      // Update conversation starters with restored language
+      updateConversationStarters();
 
       // Restore chat messages in UI
       if (chatHistory.length > 0) {
