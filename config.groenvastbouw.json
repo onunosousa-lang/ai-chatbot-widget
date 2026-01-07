@@ -8,7 +8,7 @@
   "welcomeMessage": "Welkom terug! Hoe kan ik je vandaag helpen?",
   "placeholder": "Type je bericht...",
   "position": "bottom-right",
-  "logo": "https://groenvastbouw.nl/favicon.ico",
+  "logo": "https://ai-chatbot-widget-eight.vercel.app/chatbot-logo.png",
   "emailButton": true,
   "whatsappButton": true,
   "emailAddress": "info@groenvastbouw.nl",
