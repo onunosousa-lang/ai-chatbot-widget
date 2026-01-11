@@ -833,6 +833,15 @@
     // Initialize language
     currentLanguage = config.defaultLanguage;
 
+    // Global function for conversation starters (must be defined before updateConversationStarters)
+    window.chatbotSendStarter = function(text) {
+      document.getElementById('chatbot-input').value = text;
+      sendMessage();
+      // Hide starters after first use
+      const starters = document.getElementById('chatbot-starters');
+      if (starters) starters.style.display = 'none';
+    };
+
     // Initialize conversation starters with default language
     updateConversationStarters();
 
@@ -845,15 +854,6 @@
     if (config.socialProof) {
       setupSocialProof();
     }
-
-    // Global function for conversation starters
-    window.chatbotSendStarter = function(text) {
-      document.getElementById('chatbot-input').value = text;
-      sendMessage();
-      // Hide starters after first use
-      const starters = document.getElementById('chatbot-starters');
-      if (starters) starters.style.display = 'none';
-    };
 
     // Global function for quick replies
     window.chatbotSendQuickReply = function(text) {
