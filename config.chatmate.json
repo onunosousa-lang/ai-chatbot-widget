@@ -1,0 +1,94 @@
+{
+  "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
+  "clientId": "chatmate",
+  "primaryColor": "#2ee8c2",
+  "secondaryColor": "#1661a0",
+  "headerColor": "#1661a0",
+  "companyName": "ChatMate",
+  "welcomeMessage": "Hi! Looking for an AI chatbot for your website?",
+  "placeholder": "Type your question...",
+  "position": "bottom-right",
+  "logo": null,
+  "emailButton": true,
+  "whatsappButton": true,
+  "emailAddress": "info@chatmate.nl",
+  "whatsappNumber": "+31612345678",
+  "buttonSize": "60px",
+  "chatHeight": "450px",
+  "chatWidth": "380px",
+  "zIndex": 9999,
+  "showLanguageSelector": true,
+  "languages": ["nl", "en"],
+  "defaultLanguage": "nl",
+  "proactiveTrigger": true,
+  "socialProof": true,
+  "calendlyUrl": null,
+  "enableSound": true,
+  "enableSessionPersistence": true,
+  "enableAnalytics": true,
+  "enableTypingDelay": true,
+  "showRating": true,
+  "detectReturningUsers": true,
+  "businessHours": null,
+  "pageSpecificTriggers": {
+    "/pricing": "Vragen over prijzen? Ik help je graag! 💰",
+    "/features": "Wil je weten wat ChatMate allemaal kan?",
+    "/demo": "Klaar om de demo uit te proberen? 🚀"
+  },
+  "messages": {
+    "nl": {
+      "welcomeBack": "Welkom terug! Hoe kan ik je helpen? 👋",
+      "businessHoursOnline": "Online nu",
+      "businessHoursOffline": "Offline - Reageren binnen 24u",
+      "languageChanged": "Taal gewijzigd naar",
+      "errorGeneric": "Sorry, er ging iets mis. Probeer het later opnieuw.",
+      "errorNoResponse": "Sorry, ik kon dat niet begrijpen.",
+      "errorConnection": "❌ Kan geen verbinding maken. Probeer het later opnieuw.",
+      "retryAttempt": "⚠️ Verbinding probleem. Nieuwe poging...",
+      "emailSubject": "Contact via ChatMate",
+      "whatsappMessage": "Hallo! Ik wil graag meer weten over ChatMate.",
+      "conversationStarters": [
+        "Prijzen bekijken",
+        "Demo aanvragen"
+      ],
+      "proactiveTriggers": [
+        "Vragen over ChatMate? Ik help je graag! 💬",
+        "Wil je weten hoe ChatMate werkt? 🤔",
+        "Interesse in een chatbot voor je website? 💡"
+      ],
+      "socialProof": [
+        "💬 12 bedrijven gebruiken ChatMate deze maand",
+        "✅ Gemiddeld 3-5x meer conversies",
+        "⭐ 4.8/5 sterren van klanten",
+        "🚀 Installatie binnen 48 uur"
+      ]
+    },
+    "en": {
+      "welcomeBack": "Welcome back! How can I help? 👋",
+      "businessHoursOnline": "Online now",
+      "businessHoursOffline": "Offline - Reply within 24h",
+      "languageChanged": "Language changed to",
+      "errorGeneric": "Sorry, something went wrong. Please try again later.",
+      "errorNoResponse": "Sorry, I could not understand that.",
+      "errorConnection": "❌ Could not connect. Please try again later.",
+      "retryAttempt": "⚠️ Connection issue. Retrying...",
+      "emailSubject": "Contact via ChatMate",
+      "whatsappMessage": "Hi! I'd like to know more about ChatMate.",
+      "conversationStarters": [
+        "View pricing",
+        "Request demo"
+      ],
+      "proactiveTriggers": [
+        "Questions about ChatMate? I'm here to help! 💬",
+        "Want to know how ChatMate works? 🤔",
+        "Interested in a chatbot for your website? 💡"
+      ],
+      "socialProof": [
+        "💬 12 companies use ChatMate this month",
+        "✅ Average 3-5x more conversions",
+        "⭐ 4.8/5 stars from customers",
+        "🚀 Installation within 48 hours"
+      ]
+    }
+  }
+}
