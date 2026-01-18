@@ -17,10 +17,6 @@
   "chatHeight": "450px",
   "chatWidth": "380px",
   "zIndex": 9999,
-  "conversationStarters": [
-    "Plan een gesprek",
-    "Stel een vraag"
-  ],
   "showLanguageSelector": true,
   "languages": ["nl", "en"],
   "defaultLanguage": "nl",
