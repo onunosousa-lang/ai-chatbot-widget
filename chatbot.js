@@ -317,20 +317,21 @@
       }
 
       .chatbot-logo {
-        width: 36px;
-        height: 36px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
-        background: white;
+        background: ${config.headerColor || config.primaryColor};
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
+        padding: 6px;
       }
 
       .chatbot-logo img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
 
       .chatbot-header-text h3 {
