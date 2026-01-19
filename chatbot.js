@@ -836,11 +836,18 @@
 
     // Global function for conversation starters (must be defined before updateConversationStarters)
     window.chatbotSendStarter = function(text) {
-      document.getElementById('chatbot-input').value = text;
-      sendMessage();
-      // Hide starters after first use
-      const starters = document.getElementById('chatbot-starters');
-      if (starters) starters.style.display = 'none';
+      console.log('🚀 chatbotSendStarter called with:', text);
+      const input = document.getElementById('chatbot-input');
+      if (input) {
+        input.value = text;
+        console.log('✅ Input value set to:', text);
+        sendMessage();
+        // Hide starters after first use
+        const starters = document.getElementById('chatbot-starters');
+        if (starters) starters.style.display = 'none';
+      } else {
+        console.error('❌ Input element not found!');
+      }
     };
 
     // Initialize conversation starters with default language
@@ -1005,7 +1012,23 @@
     const starters = getMessage('conversationStarters') || [];
     const startersContainer = document.getElementById('chatbot-starters');
 
-    if (!startersContainer || starters.length === 0) return;
+    console.log('🔍 Debug conversation starters:', {
+      starters,
+      startersContainer,
+      currentLanguage,
+      hasMessages: !!config.messages,
+      messagesNL: config.messages?.nl?.conversationStarters
+    });
+
+    if (!startersContainer) {
+      console.warn('⚠️ Starters container not found!');
+      return;
+    }
+
+    if (starters.length === 0) {
+      console.warn('⚠️ No starters found for language:', currentLanguage);
+      return;
+    }
 
     // Clear existing buttons
     startersContainer.innerHTML = '';
@@ -1016,13 +1039,16 @@
       button.className = 'chatbot-starter-btn';
       button.textContent = starter;
       button.onclick = () => {
+        console.log('🖱️ Button clicked:', starter);
         window.chatbotSendStarter(starter);
       };
       startersContainer.appendChild(button);
+      console.log('✅ Added button:', starter);
     });
 
     // Show the container
     startersContainer.style.display = 'flex';
+    console.log('✅ Starters container displayed');
   }
 
   // Switch language
