@@ -521,8 +521,8 @@
       .chatbot-starter-btn {
         padding: 8px 12px;
         border: 1px solid ${config.primaryColor};
-        background: ${config.primaryColor};
-        color: ${config.secondaryColor};
+        background: white;
+        color: ${config.primaryColor};
         border-radius: 16px;
         cursor: pointer;
         font-size: 13px;
@@ -532,9 +532,125 @@
       }
 
       .chatbot-starter-btn:hover {
-        background: ${config.secondaryColor};
-        color: ${config.primaryColor};
-        border-color: ${config.secondaryColor};
+        background: ${config.primaryColor};
+        color: white;
+        border-color: ${config.primaryColor};
+      }
+
+      /* Contact Form */
+      .chatbot-contact-form {
+        padding: 16px;
+        background: white;
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .chatbot-contact-form.show {
+        display: flex;
+      }
+
+      .chatbot-contact-form h4 {
+        margin: 0 0 8px 0;
+        color: #333;
+        font-size: 16px;
+      }
+
+      .chatbot-contact-form p {
+        margin: 0 0 12px 0;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .chatbot-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .chatbot-form-group label {
+        font-size: 12px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .chatbot-form-group input,
+      .chatbot-form-group textarea {
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .chatbot-form-group input:focus,
+      .chatbot-form-group textarea:focus {
+        border-color: ${config.primaryColor};
+      }
+
+      .chatbot-form-group textarea {
+        resize: vertical;
+        min-height: 60px;
+      }
+
+      .chatbot-form-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .chatbot-form-btn {
+        flex: 1;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .chatbot-form-btn-primary {
+        background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
+        color: white;
+      }
+
+      .chatbot-form-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+
+      .chatbot-form-btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .chatbot-form-btn-secondary {
+        background: white;
+        color: #666;
+        border: 1px solid #e0e0e0;
+      }
+
+      .chatbot-form-btn-secondary:hover {
+        background: #f8f9fa;
+      }
+
+      .chatbot-form-error {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      .chatbot-form-success {
+        color: #28a745;
+        font-size: 14px;
+        text-align: center;
+        padding: 12px;
+        background: #d4edda;
+        border-radius: 8px;
       }
 
       /* Quick Reply Buttons */
@@ -731,6 +847,37 @@
             <!-- Conversation starters will be rendered dynamically based on language -->
           </div>
 
+          <div class="chatbot-contact-form" id="chatbot-contact-form">
+            <h4>Plan een gesprek</h4>
+            <p>Laat je gegevens achter en we nemen zo snel mogelijk contact met je op.</p>
+            <form id="chatbot-contact-form-element">
+              <div class="chatbot-form-group">
+                <label for="chatbot-contact-name">Naam *</label>
+                <input type="text" id="chatbot-contact-name" name="name" required placeholder="Je naam">
+              </div>
+              <div class="chatbot-form-group">
+                <label for="chatbot-contact-email">Email *</label>
+                <input type="email" id="chatbot-contact-email" name="email" required placeholder="je@email.nl">
+              </div>
+              <div class="chatbot-form-group">
+                <label for="chatbot-contact-phone">Telefoon</label>
+                <input type="tel" id="chatbot-contact-phone" name="phone" placeholder="+31 6 1234 5678">
+              </div>
+              <div class="chatbot-form-group">
+                <label for="chatbot-contact-message">Bericht (optioneel)</label>
+                <textarea id="chatbot-contact-message" name="message" placeholder="Vertel ons waar je aan denkt..."></textarea>
+              </div>
+              <div class="chatbot-form-actions">
+                <button type="button" class="chatbot-form-btn chatbot-form-btn-secondary" id="chatbot-contact-cancel">
+                  Annuleren
+                </button>
+                <button type="submit" class="chatbot-form-btn chatbot-form-btn-primary" id="chatbot-contact-submit">
+                  Verstuur
+                </button>
+              </div>
+            </form>
+          </div>
+
           ${config.emailButton || config.whatsappButton ? `
           <div class="chatbot-actions">
             ${config.emailButton ? `
@@ -836,17 +983,28 @@
 
     // Global function for conversation starters (must be defined before updateConversationStarters)
     window.chatbotSendStarter = function(text) {
-      console.log('🚀 chatbotSendStarter called with:', text);
-      const input = document.getElementById('chatbot-input');
-      if (input) {
-        input.value = text;
-        console.log('✅ Input value set to:', text);
-        sendMessage();
-        // Hide starters after first use
+      // Check if this is a contact request (e.g., "Plan een gesprek", "Schedule a call")
+      const isContactRequest = text.toLowerCase().includes('plan') ||
+                               text.toLowerCase().includes('schedule') ||
+                               text.toLowerCase().includes('gesprek') ||
+                               text.toLowerCase().includes('call');
+
+      if (isContactRequest) {
+        // Show contact form directly
+        showContactForm();
+        // Hide starters
         const starters = document.getElementById('chatbot-starters');
         if (starters) starters.style.display = 'none';
       } else {
-        console.error('❌ Input element not found!');
+        // Send as regular message
+        const input = document.getElementById('chatbot-input');
+        if (input) {
+          input.value = text;
+          sendMessage();
+          // Hide starters after first use
+          const starters = document.getElementById('chatbot-starters');
+          if (starters) starters.style.display = 'none';
+        }
       }
     };
 
@@ -868,6 +1026,26 @@
       document.getElementById('chatbot-input').value = text;
       sendMessage();
     };
+
+    // Contact form event listeners
+    const contactFormElement = document.getElementById('chatbot-contact-form-element');
+    const contactCancelBtn = document.getElementById('chatbot-contact-cancel');
+
+    if (contactFormElement) {
+      contactFormElement.addEventListener('submit', submitContactForm);
+    }
+
+    if (contactCancelBtn) {
+      contactCancelBtn.addEventListener('click', () => {
+        hideContactForm();
+        addMessage(
+          currentLanguage === 'en'
+            ? 'No problem! How else can I help you today?'
+            : 'Geen probleem! Hoe kan ik je anders helpen?',
+          'bot'
+        );
+      });
+    }
   }
 
   function sendMessage() {
@@ -1012,23 +1190,8 @@
     const starters = getMessage('conversationStarters') || [];
     const startersContainer = document.getElementById('chatbot-starters');
 
-    console.log('🔍 Debug conversation starters:', {
-      starters,
-      startersContainer,
-      currentLanguage,
-      hasMessages: !!config.messages,
-      messagesNL: config.messages?.nl?.conversationStarters
-    });
-
-    if (!startersContainer) {
-      console.warn('⚠️ Starters container not found!');
-      return;
-    }
-
-    if (starters.length === 0) {
-      console.warn('⚠️ No starters found for language:', currentLanguage);
-      return;
-    }
+    if (!startersContainer) return;
+    if (starters.length === 0) return;
 
     // Clear existing buttons
     startersContainer.innerHTML = '';
@@ -1039,16 +1202,13 @@
       button.className = 'chatbot-starter-btn';
       button.textContent = starter;
       button.onclick = () => {
-        console.log('🖱️ Button clicked:', starter);
         window.chatbotSendStarter(starter);
       };
       startersContainer.appendChild(button);
-      console.log('✅ Added button:', starter);
     });
 
     // Show the container
     startersContainer.style.display = 'flex';
-    console.log('✅ Starters container displayed');
   }
 
   // Switch language
@@ -1581,6 +1741,131 @@
       analytics.track('mobile_optimizations_enabled', {
         userAgent: navigator.userAgent
       });
+    }
+  }
+
+  // Contact Form Functions
+  function showContactForm() {
+    const contactForm = document.getElementById('chatbot-contact-form');
+    const inputArea = document.querySelector('.chatbot-input-area');
+    const starters = document.getElementById('chatbot-starters');
+
+    if (contactForm) {
+      contactForm.classList.add('show');
+      // Hide input area and starters when form is shown
+      if (inputArea) inputArea.style.display = 'none';
+      if (starters) starters.style.display = 'none';
+
+      // Add bot message
+      addMessage(
+        currentLanguage === 'en'
+          ? 'Perfect! Please fill in your contact details and we\'ll get back to you as soon as possible.'
+          : 'Perfect! Vul je contactgegevens in en we nemen zo snel mogelijk contact met je op.',
+        'bot'
+      );
+
+      analytics.track('contact_form_shown', {});
+    }
+  }
+
+  function hideContactForm() {
+    const contactForm = document.getElementById('chatbot-contact-form');
+    const inputArea = document.querySelector('.chatbot-input-area');
+    const starters = document.getElementById('chatbot-starters');
+
+    if (contactForm) {
+      contactForm.classList.remove('show');
+      // Show input area again
+      if (inputArea) inputArea.style.display = 'flex';
+      // Show starters again if they were visible
+      if (starters && config.conversationStarters && config.conversationStarters.length > 0) {
+        starters.style.display = 'flex';
+      }
+
+      // Reset form
+      const form = document.getElementById('chatbot-contact-form-element');
+      if (form) form.reset();
+    }
+  }
+
+  async function submitContactForm(event) {
+    event.preventDefault();
+
+    const submitBtn = document.getElementById('chatbot-contact-submit');
+    const form = document.getElementById('chatbot-contact-form-element');
+
+    if (!form) return;
+
+    // Disable submit button
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = currentLanguage === 'en' ? 'Sending...' : 'Versturen...';
+    }
+
+    // Get form data
+    const formData = new FormData(form);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      message: formData.get('message'),
+      clientId: config.clientId,
+      clientEmail: config.emailAddress,
+      companyName: config.companyName
+    };
+
+    try {
+      const response = await fetch('https://ai-chatbot-widget-eight.vercel.app/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // Success! Show confirmation message
+        addMessage(
+          currentLanguage === 'en'
+            ? `Thank you, ${data.name}! We've received your contact details and will get back to you soon. You'll also receive a confirmation email at ${data.email}.`
+            : `Bedankt, ${data.name}! We hebben je gegevens ontvangen en nemen zo snel mogelijk contact met je op. Je ontvangt ook een bevestigingsmail op ${data.email}.`,
+          'bot'
+        );
+
+        analytics.track('contact_form_submitted', {
+          name: data.name,
+          email: data.email,
+          hasPhone: !!data.phone,
+          hasMessage: !!data.message
+        });
+
+        // Hide form and reset
+        setTimeout(() => {
+          hideContactForm();
+        }, 2000);
+      } else {
+        throw new Error(result.error || 'Submission failed');
+      }
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      addMessage(
+        currentLanguage === 'en'
+          ? 'Sorry, something went wrong. Please try again or use the email/WhatsApp buttons below.'
+          : 'Sorry, er ging iets mis. Probeer het opnieuw of gebruik de email/WhatsApp knoppen hieronder.',
+        'bot'
+      );
+
+      analytics.track('contact_form_error', {
+        error: error.message
+      });
+    } finally {
+      // Re-enable submit button
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = currentLanguage === 'en' ? 'Submit' : 'Verstuur';
+      }
     }
   }
 
