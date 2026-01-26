@@ -1,18 +1,1 @@
-{
-  "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
-  "primaryColor": "#2ee8c2",
-  "secondaryColor": "#1661a0",
-  "companyName": "Your Company Name",
-  "welcomeMessage": "Hi! Welcome to our website. How can I help you today?",
-  "placeholder": "Type your message...",
-  "position": "bottom-right",
-  "logo": "https://your-domain.com/logo.png",
-  "emailButton": true,
-  "whatsappButton": true,
-  "emailAddress": "contact@your-company.com",
-  "whatsappNumber": "+31612345678",
-  "buttonSize": "60px",
-  "chatHeight": "450px",
-  "chatWidth": "380px",
-  "zIndex": 9999
-}
+bots/chatbot-website/config.json
