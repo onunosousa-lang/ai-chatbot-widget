@@ -839,59 +839,13 @@
       console.log('🚀 chatbotSendStarter called with:', text);
       const input = document.getElementById('chatbot-input');
       if (input) {
-        // Check if this is a "Plan een gesprek" / "Schedule a call" button
-        const isPlanGesprek = text === 'Plan een gesprek' || text === 'Schedule a call';
-        
-        if (isPlanGesprek) {
-          // For "Plan een gesprek", immediately start the contact intake
-          // Add user message first
-          addMessage(text, 'user');
-          chatHistory.push({ role: 'user', content: text });
-          
-          // Hide starters after first use
-          const starters = document.getElementById('chatbot-starters');
-          if (starters) starters.style.display = 'none';
-          
-          // Show typing indicator
-          showTyping();
-          
-          // Send to API
-          fetch(config.apiUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              message: text,
-              clientId: config.clientId,
-              threadId: currentThreadId,
-              language: currentLanguage
-            })
-          })
-          .then(res => res.json())
-          .then(data => {
-            hideTyping();
-            if (data.threadId) {
-              currentThreadId = data.threadId;
-            }
-            const botResponse = data.response || data.message || getMessage('errorNoResponse');
-            chatHistory.push({ role: 'assistant', content: botResponse });
-            addMessage(botResponse, 'bot');
-          })
-          .catch(err => {
-            hideTyping();
-            addMessage(getMessage('errorGeneric'), 'bot');
-            console.error('Chatbot API error:', err);
-          });
-        } else {
-          // For other starters, use normal flow
-          input.value = text;
-          console.log('✅ Input value set to:', text);
-          sendMessage();
-          // Hide starters after first use
-          const starters = document.getElementById('chatbot-starters');
-          if (starters) starters.style.display = 'none';
-        }
+        // Set input value and send message
+        input.value = text;
+        console.log('✅ Input value set to:', text);
+        sendMessage();
+        // Hide starters after first use
+        const starters = document.getElementById('chatbot-starters');
+        if (starters) starters.style.display = 'none';
       } else {
         console.error('❌ Input element not found!');
       }
