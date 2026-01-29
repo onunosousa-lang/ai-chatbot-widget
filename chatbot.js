@@ -436,7 +436,7 @@
       .chatbot-actions {
         padding: 12px 16px;
         background: white;
-        border-top: 1px solid #e0e0e0;
+        border-top: 1px solid #dcdcdc;
         display: flex;
         gap: 8px;
       }
@@ -467,7 +467,7 @@
       .chatbot-input-area {
         padding: 16px;
         background: white;
-        border-top: 1px solid #e0e0e0;
+        border-top: 1px solid #dcdcdc;
         display: flex;
         gap: 8px;
       }
@@ -475,7 +475,7 @@
       .chatbot-input {
         flex: 1;
         padding: 10px 14px;
-        border: 1px solid #e0e0e0;
+        border: 1px solid #dcdcdc;
         border-radius: 20px;
         font-size: 14px;
         outline: none;
@@ -513,7 +513,7 @@
       .chatbot-starters {
         padding: 12px 16px;
         background: white;
-        border-top: 1px solid #e0e0e0;
+        border-top: 1px solid #dcdcdc;
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
@@ -739,7 +739,7 @@
         background: none;
         border: none;
         cursor: pointer;
-        color: #999;
+        color: #2a3439;
         font-size: 16px;
       }
 
