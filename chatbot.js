@@ -226,10 +226,10 @@
         width: ${config.buttonSize};
         height: ${config.buttonSize};
         border-radius: 50%;
-        background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
+        background: #8eb564;
         border: none;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 0 ${config.primaryColor};
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 0 #8eb564;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -241,6 +241,7 @@
       .chatbot-button:hover {
         transform: scale(1.05);
         box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        background: #7aa050;
       }
 
       .chatbot-button svg {
@@ -273,10 +274,10 @@
 
       @keyframes pulse {
         0%, 100% {
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 0 ${config.primaryColor};
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 0 #8eb564;
         }
         50% {
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 10px rgba(46,232,194,0);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 10px rgba(142,181,100,0);
         }
       }
 
@@ -398,7 +399,7 @@
       }
 
       .chatbot-message.user .chatbot-message-content {
-        background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
+        background: #8eb564;
         color: white;
         border-bottom-right-radius: 4px;
       }
@@ -416,7 +417,7 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: ${config.primaryColor};
+        background: #8eb564;
         animation: typing 1.4s infinite;
       }
 
@@ -444,8 +445,8 @@
       .chatbot-action-btn {
         flex: 1;
         padding: 8px 12px;
-        border: 1px solid ${config.primaryColor};
-        background: ${config.primaryColor};
+        border: 1px solid #8eb564;
+        background: #8eb564;
         color: white;
         border-radius: 8px;
         cursor: pointer;
@@ -459,9 +460,9 @@
       }
 
       .chatbot-action-btn:hover {
-        background: ${config.secondaryColor};
+        background: #7aa050;
         color: white;
-        border-color: ${config.secondaryColor};
+        border-color: #7aa050;
       }
 
       .chatbot-input-area {
@@ -480,28 +481,31 @@
         font-size: 14px;
         outline: none;
         transition: border-color 0.2s;
+        background: #dcdcdc;
+        color: #2a3439;
       }
 
       .chatbot-input:focus {
-        border-color: ${config.primaryColor};
+        border-color: #8eb564;
       }
 
       .chatbot-send {
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
+        background: #8eb564;
         border: none;
         color: white;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.2s;
+        transition: transform 0.2s, background 0.2s;
       }
 
       .chatbot-send:hover {
         transform: scale(1.05);
+        background: #7aa050;
       }
 
       .chatbot-send:disabled {
@@ -521,8 +525,8 @@
 
       .chatbot-starter-btn {
         padding: 8px 12px;
-        border: 1px solid ${config.primaryColor};
-        background: ${config.primaryColor};
+        border: 1px solid #8eb564;
+        background: #8eb564;
         color: white;
         border-radius: 16px;
         cursor: pointer;
@@ -533,9 +537,9 @@
       }
 
       .chatbot-starter-btn:hover {
-        background: ${config.secondaryColor};
+        background: #7aa050;
         color: white;
-        border-color: ${config.secondaryColor};
+        border-color: #7aa050;
       }
 
       /* Contact Form */
@@ -667,8 +671,8 @@
 
       .chatbot-quick-reply {
         padding: 6px 12px;
-        background: ${config.primaryColor};
-        border: 1px solid ${config.primaryColor};
+        background: #8eb564;
+        border: 1px solid #8eb564;
         color: white;
         border-radius: 12px;
         cursor: pointer;
@@ -678,9 +682,9 @@
       }
 
       .chatbot-quick-reply:hover {
-        background: ${config.secondaryColor};
+        background: #7aa050;
         color: white;
-        border-color: ${config.secondaryColor};
+        border-color: #7aa050;
       }
 
       /* Language Selector */
@@ -703,8 +707,9 @@
 
       .chatbot-lang-btn:hover,
       .chatbot-lang-btn.active {
-        background: white;
-        color: ${config.primaryColor};
+        background: #8eb564;
+        color: white;
+        border-color: #8eb564;
       }
 
       /* Social Proof Notification */
