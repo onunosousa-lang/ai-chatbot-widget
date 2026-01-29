@@ -1,9 +1,9 @@
 {
   "apiUrl": "https://ai-chatbot-widget-eight.vercel.app/api/chat",
   "clientId": "groenvastbouw",
-  "primaryColor": "#141b2c",
-  "secondaryColor": "#8eda36",
-  "headerColor": "#141b2c",
+  "primaryColor": "#2a3439",
+  "secondaryColor": "#8eb564",
+  "headerColor": "#2a3439",
   "companyName": "Groenvastbouw",
   "welcomeMessage": "Welkom terug! Hoe kan ik je vandaag helpen?",
   "placeholder": "Type je bericht...",
