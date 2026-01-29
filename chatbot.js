@@ -254,7 +254,7 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        background: #ff4444;
+        background: #8eb564;
         color: white;
         border-radius: 50%;
         min-width: 20px;
@@ -303,7 +303,7 @@
       }
 
       .chatbot-header {
-        background: ${config.headerColor || `linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%)`};
+        background: #2a3439;
         color: white;
         padding: 16px;
         display: flex;
@@ -321,7 +321,7 @@
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background: ${config.headerColor || config.primaryColor};
+        background: #8eb564;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -643,21 +643,21 @@
       }
 
       .chatbot-form-btn-secondary:hover {
-        background: #3a4449;
+        background: #8eb564;
       }
 
       .chatbot-form-error {
-        color: #dc3545;
+        color: #2a3439;
         font-size: 12px;
         margin-top: 4px;
       }
 
       .chatbot-form-success {
-        color: #28a745;
+        color: #2a3439;
         font-size: 14px;
         text-align: center;
         padding: 12px;
-        background: #d4edda;
+        background: #dcdcdc;
         border-radius: 8px;
       }
 
@@ -758,7 +758,7 @@
       }
 
       .chatbot-message-content a {
-        color: ${config.primaryColor};
+        color: #8eb564;
         text-decoration: underline;
       }
 
@@ -813,9 +813,9 @@
   }
 
   function createChatbotHTML() {
-    const logoHTML = config.logo 
+    const logoHTML = config.logo
       ? `<img src="${config.logo}" alt="${config.companyName}">`
-      : `<svg viewBox="0 0 24 24" fill="${config.primaryColor}"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`;
+      : `<svg viewBox="0 0 24 24" fill="#8eb564"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`;
 
     return `
       <div class="chatbot-container">
@@ -1484,10 +1484,10 @@
 
     if (isWithinBusinessHours()) {
       statusText.textContent = getMessage('businessHoursOnline');
-      statusText.style.color = '#4CAF50';
+      statusText.style.color = '#8eb564';
     } else {
       statusText.textContent = getMessage('businessHoursOffline');
-      statusText.style.color = '#FF9800';
+      statusText.style.color = '#2a3439';
     }
   }
 
