@@ -445,8 +445,8 @@
         flex: 1;
         padding: 8px 12px;
         border: 1px solid ${config.primaryColor};
-        background: white;
-        color: ${config.primaryColor};
+        background: ${config.primaryColor};
+        color: white;
         border-radius: 8px;
         cursor: pointer;
         font-size: 13px;
@@ -459,8 +459,9 @@
       }
 
       .chatbot-action-btn:hover {
-        background: ${config.primaryColor};
+        background: ${config.secondaryColor};
         color: white;
+        border-color: ${config.secondaryColor};
       }
 
       .chatbot-input-area {
@@ -521,8 +522,8 @@
       .chatbot-starter-btn {
         padding: 8px 12px;
         border: 1px solid ${config.primaryColor};
-        background: white;
-        color: ${config.primaryColor};
+        background: ${config.primaryColor};
+        color: white;
         border-radius: 16px;
         cursor: pointer;
         font-size: 13px;
@@ -532,9 +533,9 @@
       }
 
       .chatbot-starter-btn:hover {
-        background: ${config.primaryColor};
+        background: ${config.secondaryColor};
         color: white;
-        border-color: ${config.primaryColor};
+        border-color: ${config.secondaryColor};
       }
 
       /* Contact Form */
@@ -665,7 +666,7 @@
         padding: 6px 12px;
         background: ${config.primaryColor};
         border: 1px solid ${config.primaryColor};
-        color: ${config.secondaryColor};
+        color: white;
         border-radius: 12px;
         cursor: pointer;
         font-size: 12px;
@@ -675,7 +676,7 @@
 
       .chatbot-quick-reply:hover {
         background: ${config.secondaryColor};
-        color: ${config.primaryColor};
+        color: white;
         border-color: ${config.secondaryColor};
       }
 
