@@ -20,8 +20,8 @@
   const defaultConfig = {
     apiUrl: 'https://ai-chatbot-widget-eight.vercel.app/api/chat',
     clientId: 'default', // Client identifier for multi-tenant support
-    primaryColor: '#2ee8c2',
-    secondaryColor: '#1661a0',
+    primaryColor: '#2a3439',
+    secondaryColor: '#8eb564',
     companyName: 'Chatbots-IA',
     welcomeMessage: 'Hi! How can I help you today?',
     placeholder: 'Type your message...',
@@ -367,7 +367,7 @@
         flex: 1;
         overflow-y: auto;
         padding: 16px;
-        background: #f8f9fa;
+        background: #dcdcdc;
       }
 
       .chatbot-message {
@@ -393,7 +393,7 @@
 
       .chatbot-message.bot .chatbot-message-content {
         background: white;
-        color: #333;
+        color: #2a3439;
         border-bottom-left-radius: 4px;
       }
 
@@ -553,13 +553,13 @@
 
       .chatbot-contact-form h4 {
         margin: 0 0 8px 0;
-        color: #333;
+        color: #8eb564;
         font-size: 16px;
       }
 
       .chatbot-contact-form p {
         margin: 0 0 12px 0;
-        color: #666;
+        color: #2a3439;
         font-size: 14px;
       }
 
@@ -571,24 +571,26 @@
 
       .chatbot-form-group label {
         font-size: 12px;
-        color: #666;
+        color: #2a3439;
         font-weight: 500;
       }
 
       .chatbot-form-group input,
       .chatbot-form-group textarea {
         padding: 10px;
-        border: 1px solid #e0e0e0;
+        border: 1px solid #dcdcdc;
         border-radius: 8px;
         font-size: 14px;
         font-family: inherit;
         outline: none;
         transition: border-color 0.2s;
+        background: #dcdcdc;
+        color: #2a3439;
       }
 
       .chatbot-form-group input:focus,
       .chatbot-form-group textarea:focus {
-        border-color: ${config.primaryColor};
+        border-color: #8eb564;
       }
 
       .chatbot-form-group textarea {
@@ -614,13 +616,14 @@
       }
 
       .chatbot-form-btn-primary {
-        background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
+        background: #8eb564;
         color: white;
       }
 
       .chatbot-form-btn-primary:hover {
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        background: #7aa050;
       }
 
       .chatbot-form-btn-primary:disabled {
@@ -630,13 +633,13 @@
       }
 
       .chatbot-form-btn-secondary {
-        background: white;
-        color: #666;
-        border: 1px solid #e0e0e0;
+        background: #2a3439;
+        color: white;
+        border: 1px solid #2a3439;
       }
 
       .chatbot-form-btn-secondary:hover {
-        background: #f8f9fa;
+        background: #3a4449;
       }
 
       .chatbot-form-error {

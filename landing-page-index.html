@@ -22,13 +22,13 @@
         }
 
         :root {
-            --primary: #2ee8c2;
-            --secondary: #1661a0;
-            --accent: #ff6b6b;
-            --dark: #2d3748;
-            --gray: #4a5568;
-            --light-gray: #e2e8f0;
-            --bg: #f7fafc;
+            --primary: #8eb564;
+            --secondary: #2a3439;
+            --accent: #8eb564;
+            --dark: #2a3439;
+            --gray: #2a3439;
+            --light-gray: #dcdcdc;
+            --bg: #dcdcdc;
             --white: #ffffff;
         }
 
@@ -41,7 +41,7 @@
 
         /* Navigation */
         nav {
-            background: var(--white);
+            background: rgba(220, 220, 220, 0.95);
             padding: 1rem 0;
             position: sticky;
             top: 0;
@@ -61,7 +61,7 @@
         .logo {
             font-size: 24px;
             font-weight: bold;
-            color: var(--primary);
+            color: #8eb564;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -75,17 +75,18 @@
         }
 
         .nav-links a {
-            color: var(--gray);
+            color: #2a3439;
             text-decoration: none;
             transition: color 0.3s;
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: #8eb564;
         }
 
         .lang-switch {
-            background: var(--light-gray);
+            background: #2a3439;
+            color: white;
             border: none;
             padding: 8px 15px;
             border-radius: 20px;
@@ -95,13 +96,13 @@
         }
 
         .lang-switch:hover {
-            background: var(--primary);
-            color: var(--white);
+            background: #8eb564;
+            color: white;
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            background: linear-gradient(135deg, #2a3439 0%, #8eb564 100%);
             color: var(--white);
             padding: 100px 20px;
             text-align: center;
@@ -144,25 +145,27 @@
         }
 
         .btn-primary {
-            background: var(--white);
-            color: var(--secondary);
+            background: #8eb564;
+            color: white;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #7aa050;
         }
 
         .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid var(--white);
+            background: #2a3439;
+            color: white;
+            border: 2px solid #2a3439;
         }
 
         .btn-secondary:hover {
-            background: var(--white);
-            color: var(--secondary);
+            background: #3a4449;
+            color: white;
+            border-color: #3a4449;
         }
 
         /* Stats Bar */
@@ -183,12 +186,12 @@
 
         .stat-item h3 {
             font-size: 36px;
-            color: var(--primary);
+            color: #8eb564;
             margin-bottom: 5px;
         }
 
         .stat-item p {
-            color: var(--gray);
+            color: #2a3439;
         }
 
         /* Features Section */
@@ -205,12 +208,12 @@
         .section-title h2 {
             font-size: 40px;
             margin-bottom: 15px;
-            color: var(--dark);
+            color: #8eb564;
         }
 
         .section-title p {
             font-size: 18px;
-            color: var(--gray);
+            color: #2a3439;
         }
 
         .features-grid {
@@ -242,11 +245,11 @@
         .feature-card h3 {
             font-size: 24px;
             margin-bottom: 15px;
-            color: var(--dark);
+            color: #8eb564;
         }
 
         .feature-card p {
-            color: var(--gray);
+            color: #2a3439;
             line-height: 1.8;
         }
 
@@ -271,8 +274,8 @@
         .step-number {
             min-width: 60px;
             height: 60px;
-            background: var(--primary);
-            color: var(--white);
+            background: #8eb564;
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -284,11 +287,11 @@
         .step-content h3 {
             font-size: 22px;
             margin-bottom: 10px;
-            color: var(--dark);
+            color: #8eb564;
         }
 
         .step-content p {
-            color: var(--gray);
+            color: #2a3439;
             line-height: 1.8;
         }
 
@@ -316,13 +319,13 @@
         }
 
         .pricing-card.featured {
-            border: 3px solid var(--primary);
+            border: 3px solid #8eb564;
             transform: scale(1.05);
         }
 
         .popular-badge {
-            background: var(--accent);
-            color: var(--white);
+            background: #8eb564;
+            color: white;
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 14px;
@@ -335,23 +338,23 @@
         .pricing-card h3 {
             font-size: 24px;
             margin-bottom: 20px;
-            color: var(--dark);
+            color: #2a3439;
         }
 
         .price {
             font-size: 48px;
             font-weight: bold;
-            color: var(--primary);
+            color: #8eb564;
             margin-bottom: 10px;
         }
 
         .price span {
             font-size: 18px;
-            color: var(--gray);
+            color: #2a3439;
         }
 
         .price-description {
-            color: var(--gray);
+            color: #2a3439;
             margin-bottom: 30px;
         }
 
@@ -363,7 +366,7 @@
 
         .features-list li {
             padding: 10px 0;
-            color: var(--gray);
+            color: #2a3439;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -371,7 +374,7 @@
 
         .features-list li::before {
             content: "✓";
-            color: var(--primary);
+            color: #8eb564;
             font-weight: bold;
             font-size: 20px;
         }
@@ -379,7 +382,7 @@
         /* Demo Section */
         .demo {
             padding: 80px 20px;
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            background: linear-gradient(135deg, #2a3439 0%, #8eb564 100%);
             color: var(--white);
             text-align: center;
         }
@@ -410,16 +413,16 @@
         }
 
         .testimonial-card {
-            background: var(--bg);
+            background: #dcdcdc;
             padding: 30px;
             border-radius: 15px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid #8eb564;
         }
 
         .testimonial-text {
             font-style: italic;
             margin-bottom: 20px;
-            color: var(--dark);
+            color: #2a3439;
             line-height: 1.8;
         }
 
@@ -433,8 +436,8 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: var(--primary);
-            color: var(--white);
+            background: #8eb564;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -443,19 +446,19 @@
         }
 
         .author-info h4 {
-            color: var(--dark);
+            color: #2a3439;
             margin-bottom: 3px;
         }
 
         .author-info p {
-            color: var(--gray);
+            color: #2a3439;
             font-size: 14px;
         }
 
         /* CTA Section */
         .cta-section {
             padding: 80px 20px;
-            background: var(--dark);
+            background: #2a3439;
             color: var(--white);
             text-align: center;
         }
@@ -473,7 +476,7 @@
 
         /* Footer */
         footer {
-            background: var(--dark);
+            background: #2a3439;
             color: var(--white);
             padding: 40px 20px 20px;
             text-align: center;
@@ -490,7 +493,7 @@
 
         .footer-section h4 {
             margin-bottom: 15px;
-            color: var(--primary);
+            color: #8eb564;
         }
 
         .footer-section ul {
@@ -508,7 +511,7 @@
         }
 
         .footer-section a:hover {
-            color: var(--primary);
+            color: #8eb564;
         }
 
         .footer-bottom {
