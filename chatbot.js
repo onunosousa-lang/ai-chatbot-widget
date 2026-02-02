@@ -1628,6 +1628,24 @@
 
         addMessage(botResponse, 'bot');
 
+        // If the bot response is asking for contact details or suggesting contact,
+        // immediately show the contact form so the user doesn't have to confirm again
+        const lowerBotResponse = botResponse.toLowerCase();
+        const botSuggestsContact = lowerBotResponse.includes('contactgegevens') ||
+                                   lowerBotResponse.includes('contact details') ||
+                                   lowerBotResponse.includes('neem contact') ||
+                                   lowerBotResponse.includes('get in touch') ||
+                                   lowerBotResponse.includes('plan een gesprek') ||
+                                   lowerBotResponse.includes('schedule a call') ||
+                                   lowerBotResponse.includes('wilt u gebeld worden') ||
+                                   lowerBotResponse.includes('would you like to be contacted') ||
+                                   lowerBotResponse.includes('laat uw gegevens achter') ||
+                                   lowerBotResponse.includes('leave your details');
+
+        if (botSuggestsContact) {
+          showContactForm();
+        }
+
         analytics.track('message_received', {
           messageLength: botResponse.length,
           attempt: attempt
@@ -1670,6 +1688,34 @@
     const message = input?.value.trim();
 
     if (!message) return;
+
+    // Check if user is requesting contact mid-conversation
+    const lowerMsg = message.toLowerCase();
+    const isContactRequest = lowerMsg.includes('contact') ||
+                             lowerMsg.includes('bel me') ||
+                             lowerMsg.includes('bel mij') ||
+                             lowerMsg.includes('terugbellen') ||
+                             lowerMsg.includes('gesprek') ||
+                             lowerMsg.includes('neem contact') ||
+                             lowerMsg.includes('plan een') ||
+                             lowerMsg.includes('schedule') ||
+                             lowerMsg.includes('call me') ||
+                             lowerMsg.includes('call back') ||
+                             lowerMsg.includes('callback') ||
+                             lowerMsg.includes('get in touch') ||
+                             lowerMsg.includes('reach out') ||
+                             lowerMsg.includes('gebeld worden') ||
+                             lowerMsg.includes('afspraak');
+
+    if (isContactRequest) {
+      // Show user message, then immediately show contact form
+      addMessage(message, 'user');
+      input.value = '';
+      chatHistory.push({ role: 'user', content: message });
+      showContactForm();
+      saveSession();
+      return;
+    }
 
     // Add user message
     addMessage(message, 'user');
