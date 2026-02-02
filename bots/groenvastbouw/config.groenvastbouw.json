@@ -48,8 +48,7 @@
       "emailSubject": "Contact via Groenvastbouw Chatbot",
       "whatsappMessage": "Hallo! Ik heb een vraag over passiefbouw.",
       "conversationStarters": [
-        "Plan een gesprek",
-        "Stel een vraag"
+        "Plan een gesprek"
       ],
       "proactiveTriggers": [
         "Heb je een vraag? Ik help je graag! 💬",
@@ -75,8 +74,7 @@
       "emailSubject": "Contact via Groenvastbouw Chatbot",
       "whatsappMessage": "Hi! I have a question about passive construction.",
       "conversationStarters": [
-        "Schedule a call",
-        "Ask a question"
+        "Schedule a call"
       ],
       "proactiveTriggers": [
         "Have a question? I'm here to help! 💬",
