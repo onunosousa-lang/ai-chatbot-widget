@@ -992,18 +992,42 @@
 
     // Global function for conversation starters (must be defined before updateConversationStarters)
     window.chatbotSendStarter = function(text) {
+      console.log('chatbotSendStarter called with:', text);
+
       // Check if this is a contact request (e.g., "Plan een gesprek", "Schedule a call")
       const isContactRequest = text.toLowerCase().includes('plan') ||
                                text.toLowerCase().includes('schedule') ||
                                text.toLowerCase().includes('gesprek') ||
                                text.toLowerCase().includes('call');
 
+      console.log('isContactRequest:', isContactRequest);
+
       if (isContactRequest) {
         // Show contact form directly
-        showContactForm();
-        // Hide starters
+        console.log('Showing contact form...');
+        const contactForm = document.getElementById('chatbot-contact-form');
+        const inputArea = document.querySelector('.chatbot-input-area');
         const starters = document.getElementById('chatbot-starters');
-        if (starters) starters.style.display = 'none';
+
+        console.log('contactForm element:', contactForm);
+
+        if (contactForm) {
+          contactForm.classList.add('show');
+          if (inputArea) inputArea.style.display = 'none';
+          if (starters) starters.style.display = 'none';
+
+          // Add bot message asking for contact details
+          addMessage(
+            currentLanguage === 'en'
+              ? 'Perfect! Please fill in your contact details and we\'ll get back to you as soon as possible.'
+              : 'Perfect! Vul je contactgegevens in en we nemen zo snel mogelijk contact met je op.',
+            'bot'
+          );
+
+          analytics.track('contact_form_shown', {});
+        } else {
+          console.error('Contact form element not found!');
+        }
       } else {
         // Send as regular message
         const input = document.getElementById('chatbot-input');
