@@ -48,8 +48,7 @@
       "emailSubject": "Contact via ChatMate",
       "whatsappMessage": "Hallo! Ik wil graag meer weten over ChatMate.",
       "conversationStarters": [
-        "Prijzen bekijken",
-        "Demo aanvragen"
+        "Plan een gesprek"
       ],
       "proactiveTriggers": [
         "Vragen over ChatMate? Ik help je graag! 💬",
@@ -75,8 +74,7 @@
       "emailSubject": "Contact via ChatMate",
       "whatsappMessage": "Hi! I'd like to know more about ChatMate.",
       "conversationStarters": [
-        "View pricing",
-        "Request demo"
+        "Schedule a call"
       ],
       "proactiveTriggers": [
         "Questions about ChatMate? I'm here to help! 💬",
