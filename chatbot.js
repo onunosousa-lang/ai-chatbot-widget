@@ -1220,11 +1220,20 @@
 
   // Update conversation starters based on current language
   function updateConversationStarters() {
+    console.log('updateConversationStarters called');
     const starters = getMessage('conversationStarters') || [];
+    console.log('Starters from config:', starters);
     const startersContainer = document.getElementById('chatbot-starters');
+    console.log('Starters container:', startersContainer);
 
-    if (!startersContainer) return;
-    if (starters.length === 0) return;
+    if (!startersContainer) {
+      console.error('Starters container not found!');
+      return;
+    }
+    if (starters.length === 0) {
+      console.warn('No starters found in config');
+      return;
+    }
 
     // Clear existing buttons
     startersContainer.innerHTML = '';
@@ -1234,14 +1243,42 @@
       const button = document.createElement('button');
       button.className = 'chatbot-starter-btn';
       button.textContent = starter;
-      button.onclick = () => {
-        window.chatbotSendStarter(starter);
-      };
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Button clicked:', starter);
+
+        // Directly show contact form here
+        const contactForm = document.getElementById('chatbot-contact-form');
+        const inputArea = document.querySelector('.chatbot-input-area');
+        const startersDiv = document.getElementById('chatbot-starters');
+
+        console.log('Contact form element:', contactForm);
+
+        if (contactForm) {
+          contactForm.classList.add('show');
+          console.log('Added show class to contact form');
+          if (inputArea) inputArea.style.display = 'none';
+          if (startersDiv) startersDiv.style.display = 'none';
+
+          // Add bot message
+          addMessage(
+            currentLanguage === 'en'
+              ? 'Perfect! Please fill in your contact details and we\'ll get back to you as soon as possible.'
+              : 'Perfect! Vul je contactgegevens in en we nemen zo snel mogelijk contact met je op.',
+            'bot'
+          );
+        } else {
+          console.error('Contact form not found!');
+        }
+      });
       startersContainer.appendChild(button);
+      console.log('Button created for:', starter);
     });
 
     // Show the container
     startersContainer.style.display = 'flex';
+    console.log('Starters container shown');
   }
 
   // Switch language
